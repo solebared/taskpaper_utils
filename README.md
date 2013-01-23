@@ -1,4 +1,4 @@
-# Taskpaper::Parser
+# TaskpaperTools
 
 TODO: Write a gem description
 
@@ -6,7 +6,7 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'taskpaper-parser'
+    gem 'taskpaper_tools'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install taskpaper-parser
+    $ gem install taskpaper_tools
 
 ## Usage
 

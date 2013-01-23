@@ -1,9 +1,9 @@
-require './lib/taskpaper_parser'
+require './lib/taskpaper_tools'
 
-describe TaskpaperParser do
+describe TaskpaperTools do
 
   describe '#parse' do
-    let(:projects) { TaskpaperParser.parse('spec/fixtures/exemplar.taskpaper') }
+    let(:projects) { TaskpaperTools.parse('spec/fixtures/exemplar.taskpaper') }
 
     describe 'identifies projects' do
 

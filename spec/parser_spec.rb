@@ -1,8 +1,8 @@
-require './lib/taskpaper-parser/parser'
+require './lib/taskpaper_tools/parser'
 
-describe TaskpaperParser::Parser do
+describe TaskpaperTools::Parser do
 
-  let(:parser) { TaskpaperParser::Parser.new }
+  let(:parser) { TaskpaperTools::Parser.new }
 
   describe '#clean' do
     it 'strips line terminators' do

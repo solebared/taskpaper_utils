@@ -1,4 +1,4 @@
-module TaskpaperParser
+module TaskpaperTools
   class Parser
 
     def parse filepath

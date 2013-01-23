@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'taskpaper-parser/version'
+require 'taskpaper_tools/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "taskpaper-parser"
-  gem.version       = Taskpaper::Parser::VERSION
+  gem.name          = "taskpaper_tools"
+  gem.version       = TaskpaperTools::VERSION
   gem.authors       = ["lasitha ranatunga"]
   gem.email         = ["an4rcho@gmail.com"]
   gem.description   = %q{TODO: Write a gem description}
