@@ -1,5 +1,3 @@
-module Taskpaper
-  module Parser
-    VERSION = "0.0.1"
-  end
+module TaskpaperParser
+  VERSION = "0.0.1"
 end

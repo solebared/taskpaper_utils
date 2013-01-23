@@ -1,7 +1,8 @@
 require "taskpaper-parser/version"
+require "taskpaper-parser/parser"
 
-module Taskpaper
-  module Parser
-    # Your code goes here...
+module TaskpaperParser
+  def self.parse filepath
+    Parser.new.parse filepath
   end
 end

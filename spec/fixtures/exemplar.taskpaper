@@ -27,7 +27,7 @@ This project is: @tagged
 - this one has tags @mixed in @with the text
 - and @this(one) has @both
 - this is not a project even though it ends with a colon:
-This is a note even though it contains a colon: and a dash - and @tags 
+This is a note even though it contains a colon: and a dash - and @tags
 	- this is a subtask of a note (which is kinda weird IMO)
 
 	- and the whitespace above should be ignored resulting in this also being a subtask
