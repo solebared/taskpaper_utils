@@ -5,7 +5,15 @@ describe TaskpaperTools do
   describe '#parse' do
     let(:projects) { TaskpaperTools.parse('spec/fixtures/exemplar.taskpaper') }
 
-    describe 'identifies projects' do
+    describe 'projects' do
+
+      it 'identifies some projects' do
+        expect(projects.size).to be > 1
+      end
+
+      pending 'identifies all projects' do
+        expect(projects.size).to eql 3
+      end
 
       it 'excludes lines containing a colon that are actually tasks' do
         expect(projects).to_not include("- this is not a project even though it ends with a colon:")
