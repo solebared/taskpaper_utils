@@ -8,12 +8,15 @@ module TaskpaperTools
     end
 
     def parse io
-      projects = []
+      #todo: this could be better and in any case, rethink what is returned
+      projects = Hash.new
+      preceding_item = RootItem.new
       io.lines do |line|
-        item = LineItem.new(line)
+        item = LineItem.new(line, preceding_item)
         if item.project? 
-          projects << item.text
+          projects[item.text] = item
         end
+        preceding_item = item
       end
       projects
     end

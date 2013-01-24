@@ -26,9 +26,10 @@ describe TaskpaperTools::Parser do
         expect(projects).to include("Project B")
       end
 
-      pending 'contains tasks within projects' do
+      it 'contains tasks within projects' do
         project_a = projects["Project A"]
-        expect(project_a.tasks.size).to eql 2
+        expect(project_a.children.size).to eql 2
+        #todo: change this to project_a.tasks
       end
 
     end

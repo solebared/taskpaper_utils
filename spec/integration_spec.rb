@@ -1,6 +1,6 @@
 require './lib/taskpaper_tools'
 
-describe TaskpaperTools do
+describe TaskpaperTools, "integration:" do
 
   describe '#parse' do
     let(:projects) { TaskpaperTools.parse('spec/fixtures/exemplar.taskpaper') }
@@ -8,6 +8,7 @@ describe TaskpaperTools do
     describe 'projects' do
 
       it 'identifies some projects' do
+        #projects.each { |text, project| p text; p project.children }
         expect(projects.size).to be > 1
       end
 
