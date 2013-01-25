@@ -56,9 +56,8 @@ module TaskpaperTools
     end
   end
 
-  # Represents the phantom line preceding the first line and is also
-  # the root container for all items in the file
-  class RootItem < LineItem
+  #todo: a document is not a line item
+  class Document < LineItem
     def initialize
       @children = []
     end
@@ -66,7 +65,8 @@ module TaskpaperTools
       -1
     end
     def text
-      "** RootItem **"
+      #todo: append filepath
+      "Document (*path*) "
     end
     def to_s
       text

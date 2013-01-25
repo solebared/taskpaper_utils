@@ -7,18 +7,10 @@ module TaskpaperTools
       File.open(path) { |file| parse file }
     end
 
-    def parse io
-      #todo: this could be better and in any case, rethink what is returned
-      projects = Hash.new
-      preceding_item = RootItem.new
-      io.lines do |line|
-        item = LineItem.new(line, preceding_item)
-        if item.project? 
-          projects[item.text] = item
-        end
-        preceding_item = item
-      end
-      projects
+    def parse enum
+      document = Document.new
+      enum.reduce(document) { |preceding_item, line| LineItem.new(line, preceding_item) }
+      document
     end
 
   end
