@@ -24,8 +24,8 @@ describe TaskpaperTools::Parser do
 
       it 'contains projects' do
         expect(projects.size).to eql 2
-        expect(projects.first.text).to eql("Project A")
-        expect(projects.last.text ).to eql("Project B")
+        expect(projects.first.text).to eql("Project A:")
+        expect(projects.last.text ).to eql("Project B:")
       end
 
       it 'contains tasks within projects' do
