@@ -12,7 +12,6 @@ module TaskpaperTools
         # will result in differing files
         document = TaskpaperTools.parse('spec/fixtures/exemplar.taskpaper')
         Dir::Tmpname.create('taskpaper_tools_integration_spec-') do |new_file|
-          pending 'implement serialization'
           begin
             document.save(new_file)
             expect(File.read('spec/fixtures/exemplar.taskpaper')).to eql(File.read(new_file))

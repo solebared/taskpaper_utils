@@ -5,6 +5,7 @@ module TaskpaperTools
     attr_accessor :children
 
     def initialize(text, preceding_item)
+      #rename to @raw_text
       @text = clean(text)
       @children = []
       determine_parent(preceding_item)
@@ -22,6 +23,11 @@ module TaskpaperTools
       else
         @parent = preceding_item.find_common_ancestor self
       end
+    end
+
+    def serialize collector
+      collector << @text + "\n"
+      children.each { |child| child.serialize collector }
     end
 
     def text
@@ -74,8 +80,9 @@ module TaskpaperTools
     end
 
     def save path
-      File.open(path, 'w') do |file|
-        file << 'not implemented yet'
+      File.open(path, 'w') do |to_file|
+        #todo: duplication!
+        children.each { |child| child.serialize to_file }
       end
     end
   end

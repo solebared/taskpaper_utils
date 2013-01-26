@@ -39,5 +39,5 @@ This is a note even though it contains a colon: and a dash - and @tags
 	- and the whitespace above should be ignored resulting in this also being a subtask
 
 Things we are not worrying about for now...
-* nested @tags(like @this(!))
+* nested @tags(like @this(!)) - not sure if this is allowed by the spec?
 
