@@ -11,6 +11,7 @@ module TaskpaperTools
       @parent.children << self
     end
 
+    #todo: these should not be public?
     def task?;     @text =~ /\A(\s*)?-/            end
     def project?;  @text.end_with?(':') && !task?  end
     def note?;     not (task? or project?)         end
@@ -70,6 +71,12 @@ module TaskpaperTools
     end
     def to_s
       text
+    end
+
+    def save path
+      File.open(path, 'w') do |file|
+        file << 'not implemented yet'
+      end
     end
   end
 end
