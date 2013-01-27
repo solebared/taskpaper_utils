@@ -1,27 +1,27 @@
 module TaskpaperTools
 
-  #todo: Tom-doc
-  # Mixers must implement:
-  # - a #text method representing how the Entry (w/o any children) would appear in a .taskpaper file
-  # - optionally, an overriding implementation of #children to return anything that responds to
-  #   #<< and #each
+  # Internal: Groups methods included into Entry and Document
   module EntryContainer
 
-    # Provided as a convenience.  The module does not depend on the @children ivar.
-    # Override to use a different var name or implementation.  Must respond to #<< and #each.
+    # Lazy initializes an array.  Provided only for convenience; the @children
+    # ivar is not referenced, only the method
+    #
+    # Returns an object that responds to #<< and #each.
     def children() 
       @children ||= []
     end
 
-    # Any entry added must respond to #serialize(collector)
+    # Entry - We expect to hold Entry objects, however anything that responds
+    #         to #yield_text(&block) will work
     def add_child entry
       children << entry
     end
 
-    # todo: is collector the right name?
-    def serialize collector
-      collector << "#{text}\n" if respond_to? :text
-      children.each { |child| child.serialize collector }
+    # Yields own text to the block and then recurses over children,
+    # effectively yielding the whole sub-tree of text rooted from this instance
+    def yield_text &block
+      yield text if respond_to? :text
+      children.each { |child| child.yield_text &block }
     end
   end
 

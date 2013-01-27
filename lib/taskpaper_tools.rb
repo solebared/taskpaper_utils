@@ -6,8 +6,8 @@ module TaskpaperTools
     Parser.new.parse_file file
   end
   def self.save document, path
-    File.open(path, 'w') do |to_file|
-      document.serialize to_file
+    File.open(path, 'w') do |file|
+      document.yield_text { |text| file.puts text }
     end
   end
 end

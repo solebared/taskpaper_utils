@@ -155,23 +155,29 @@ module TaskpaperTools
 
     end
 
-    describe '#serialize' do
-      let(:collector) { StringIO.new }
+    describe '#yield_text' do
 
-      it "provides it's text to the collector" do
-        entry("a task").serialize collector
-        expect(collector.string).to eql("a task\n")
+      it "yields it's text" do
+        expect{ |b| entry("a task").yield_text(&b) }.to yield_with_args "a task"
       end
 
       it "provides it's children's text to the collector" do
         project = entry("project:"                 )
         task    = entry("\t- task",      project   )
         subtask = entry("\t\t- subtask", task      )
-        project.serialize collector
-        expect(collector.string).to eql "project:\n\t- task\n\t\t- subtask\n"
+        expect{ |b| project.yield_text(&b) }
+          .to yield_successive_args "project:", "\t- task", "\t\t- subtask"
       end
 
-      #todo: Document serialize should not print anything
+      describe "when it doesn't have any text" do
+        it "skips itself but yields it's children" do
+          document = Document.new
+          one = entry("\t- one", document)
+          two = entry("\t- two", one)
+          expect{ |b| document.yield_text(&b) }
+            .to yield_successive_args "\t- one", "\t- two"
+        end
+      end
     end
   end
 end
