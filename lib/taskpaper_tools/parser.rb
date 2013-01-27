@@ -1,4 +1,4 @@
-require 'taskpaper_tools/line_item'
+require 'taskpaper_tools/entry'
 
 module TaskpaperTools
   class Parser

@@ -1,4 +1,4 @@
-require "./lib/taskpaper_tools/line_item.rb"
+require "./lib/taskpaper_tools/entry"
 
 module TaskpaperTools
   describe Entry do
