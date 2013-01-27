@@ -20,10 +20,9 @@ module TaskpaperTools
 
     # todo: is collector the right name?
     def serialize collector
-      collector << "#{text}\n" unless text.nil?   # root Document should not add any text
+      collector << "#{text}\n" if respond_to? :text
       children.each { |child| child.serialize collector }
     end
-
   end
 
   class Entry
@@ -32,27 +31,13 @@ module TaskpaperTools
     attr_reader :parent
     attr_reader :text
 
-    def initialize(raw_text, preceding_entry)
-      @text = clean(raw_text)
-      @parent = determine_parent(preceding_entry)
-      @parent.add_child self
-    end
-
-    #todo: these should not be public?
-    def task?;     @text =~ /\A(\s*)?-/            end
-    def project?;  @text.end_with?(':') && !task?  end
-    def note?;     not (task? or project?)         end
-
-    def determine_parent preceding_entry
-      if preceding_entry.indented_less_than(self)
-        preceding_entry
-      else
-        preceding_entry.find_common_ancestor self
-      end
-    end
-
-    def indented_less_than other
-      indents < other.indents
+    def self.create text, preceding_entry
+      ( case
+        when text =~ /\A(\s*)?-/  then Task
+        when text.end_with?(':')  then Project
+        else                           Note
+        end
+      ).new text, preceding_entry
     end
 
     #todo: this is only public for testing
@@ -64,47 +49,61 @@ module TaskpaperTools
       "#{text} <- #{parent.text}"
     end
 
-    def find_common_ancestor other
-      if indents == other.indents
-        #todo: this is specific to  a project
-        if self.project? && !other.project?
-          return self 
-        else
-          return parent
-        end
+    protected
+
+    #todo: try one more time to name this method
+    def find_shared_ancestor_of other
+      if indents < other.indents
+        self
+      elsif indents == other.indents
+        select_parent_of_equally_indent_entry other
+      else
+        parent.find_shared_ancestor_of other
       end
-      parent.find_common_ancestor other
+    end
+
+    def select_parent_of_equally_indent_entry other
+      # for tasks and notes, this is easy
+      # if two entries have equal indents, then they have the same parent
+      parent
+    end
+
+    private
+
+    def initialize(raw_text, preceding_entry)
+      @text = clean(raw_text)
+      @parent = preceding_entry.find_shared_ancestor_of(self)
+      @parent.add_child self
     end
 
     def clean raw_text
       raw_text.rstrip.sub(/\A */, '')
     end
+  end
 
-    private   :determine_parent, :clean
-    protected :find_common_ancestor, :indented_less_than
+  class Project < Entry
+    def select_parent_of_equally_indent_entry other
+      # i own equally indented tasks and notes but not projects
+      other.is_a?(Project) ? parent : self 
+    end
+  end
 
+  class Task < Entry
+  end
+
+  class Note < Entry
   end
 
   class Document
     include EntryContainer
 
-    def indented_less_than other
-      true  #Document is always the least indented
-    end
-
-    def text
-      nil
+    def find_shared_ancestor_of other
+      self  # **I** am your father... you know this to be true ('cos i have no ancestors)
     end
 
     def to_s
       #todo: append filepath
       "Document (*path*) "
-    end
-
-    def save path
-      File.open(path, 'w') do |to_file|
-        serialize to_file
-      end
     end
   end
 end

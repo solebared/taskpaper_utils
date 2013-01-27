@@ -6,23 +6,31 @@ module TaskpaperTools
     #it "retains the last two components of the filename (w/o .taskpaper extension)"
     #it "contains tasks and notes that don't belong to a projcect"
 
-    describe 'initialization' do
-      it 'requires a line of text and an Entry representing the preceding line' do
-        expect {
-          first_entry = entry("The first line has no preceding one - we pass the Document", Document.new)
-          second_entry = entry("subsequent lines are initialized with their predecessor", first_entry)
-        }.to_not raise_error
-      end
+    def entry(text, previous_entry = Document.new)
+      Entry.create text, previous_entry
     end
 
-    describe '#type' do
-      it ('recognizes a project line') { expect(entry("a project:")).to be_project } 
-      it ('recognizes a task line'   ) { expect(entry("- a task"  )).to be_task    }
-      it ('recognizes a note'        ) { expect(entry("a note"    )).to be_note    }
+    describe '.create' do
 
-      #todo edge cases:
-      # - this is a task though it ends with a colon:
-      #
+      describe 'recognizes basic entry types' do
+        it ('recognizes a project') { expect(entry("a project:")).to be_a(Project)} 
+        it ('recognizes a task   ') { expect(entry("- a task"  )).to be_a(Task   )}
+        it ('recognizes a note   ') { expect(entry("a note"    )).to be_a(Note   )}
+
+        #todo edge cases:
+        # - this is a task though it ends with a colon:
+        #
+      end
+
+      describe 'initialization' do
+        it 'requires a line of text and an Entry representing the preceding line' do
+          expect {
+            first_entry = entry("The first line has no preceding one - we pass the Document", Document.new)
+            second_entry = entry("subsequent lines are initialized with their predecessor", first_entry)
+          }.to_not raise_error
+        end
+      end
+
     end
 
     describe 'entry nesting:' do
@@ -164,10 +172,6 @@ module TaskpaperTools
       end
 
       #todo: Document serialize should not print anything
-    end
-
-    def entry(text, previous_entry = Document.new)
-      Entry.new text, previous_entry
     end
   end
 end

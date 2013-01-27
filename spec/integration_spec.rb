@@ -13,7 +13,7 @@ module TaskpaperTools
         document = TaskpaperTools.parse('spec/fixtures/exemplar.taskpaper')
         Dir::Tmpname.create('taskpaper_tools_integration_spec-') do |new_file|
           begin
-            document.save(new_file)
+            TaskpaperTools.save(document, new_file)
             expect(File.read('spec/fixtures/exemplar.taskpaper')).to eql(File.read(new_file))
           ensure
             File.delete(new_file) if File.exist?(new_file)
