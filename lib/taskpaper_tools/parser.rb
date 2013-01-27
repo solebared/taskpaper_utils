@@ -9,7 +9,7 @@ module TaskpaperTools
 
     def parse enum
       document = Document.new
-      enum.reduce(document) { |preceding_item, line| LineItem.new(line, preceding_item) }
+      enum.reduce(document) { |preceding_entry, line| Entry.new(line, preceding_entry) }
       document
     end
 

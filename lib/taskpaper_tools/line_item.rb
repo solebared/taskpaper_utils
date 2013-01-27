@@ -26,8 +26,7 @@ module TaskpaperTools
 
   end
 
-  #todo: rename to Entry
-  class LineItem
+  class Entry
     include EntryContainer
 
     attr_reader :parent
@@ -86,7 +85,6 @@ module TaskpaperTools
 
   end
 
-  #todo: a document is not a line item
   class Document
     include EntryContainer
 
