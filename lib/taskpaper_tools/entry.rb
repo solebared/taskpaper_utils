@@ -40,39 +40,45 @@ module TaskpaperTools
       ).new text, preceding_entry
     end
 
-    #todo: this is only public for testing
+    def document
+      parent.document
+    end
+
+    # Internal
     def indents
       text[/\A\t*/].size
     end
 
+    # Internal
     def to_s
-      "#{text} <- #{parent.text}"
+      text
     end
 
     protected
 
-    #todo: try one more time to name this method
-    def find_shared_ancestor_of other
-      if indents < other.indents
+    def find_parent_of later_entry
+      if indents < later_entry.indents
         self
-      elsif indents == other.indents
-        select_parent_of_equally_indent_entry other
+      elsif indents == later_entry.indents
+        select_parent_of_equally_indented_entry later_entry
       else
-        parent.find_shared_ancestor_of other
+        parent.find_parent_of later_entry
       end
     end
 
-    def select_parent_of_equally_indent_entry other
-      # for tasks and notes, this is easy
-      # if two entries have equal indents, then they have the same parent
-      parent
+    def select_parent_of_equally_indented_entry later_entry
+      if indents == 0
+        return document if later_entry.is_a?(Project)
+        return self if self.is_a?(Project)
+      end
+      return parent
     end
 
     private
 
     def initialize(raw_text, preceding_entry)
       @text = clean(raw_text)
-      @parent = preceding_entry.find_shared_ancestor_of(self)
+      @parent = preceding_entry.find_parent_of(self)
       @parent.add_child self
     end
 
@@ -82,10 +88,6 @@ module TaskpaperTools
   end
 
   class Project < Entry
-    def select_parent_of_equally_indent_entry other
-      # i own equally indented tasks and notes but not projects
-      other.is_a?(Project) ? parent : self 
-    end
   end
 
   class Task < Entry
@@ -97,13 +99,16 @@ module TaskpaperTools
   class Document
     include EntryContainer
 
-    def find_shared_ancestor_of other
-      self  # **I** am your father... you know this to be true ('cos i have no ancestors)
+    def find_parent_of other
+      self  # **I** am your father... you know this to be true (i have no ancestors)
+    end
+
+    def document
+      self
     end
 
     def to_s
-      #todo: append filepath
-      "Document (*path*) "
+      "==Document=="
     end
   end
 end

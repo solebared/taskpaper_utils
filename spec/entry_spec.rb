@@ -3,7 +3,6 @@ require "./lib/taskpaper_tools/entry"
 module TaskpaperTools
   describe Entry do
     #todo: spec Document
-    #it "retains the last two components of the filename (w/o .taskpaper extension)"
     #it "contains tasks and notes that don't belong to a projcect"
 
     def entry(text, previous_entry = Document.new)
@@ -16,10 +15,15 @@ module TaskpaperTools
         it ('recognizes a project') { expect(entry("a project:")).to be_a(Project)} 
         it ('recognizes a task   ') { expect(entry("- a task"  )).to be_a(Task   )}
         it ('recognizes a note   ') { expect(entry("a note"    )).to be_a(Note   )}
+      end
 
-        #todo edge cases:
-        # - this is a task though it ends with a colon:
-        #
+      describe 'edge cases:' do
+
+        it 'recognizes tasks that end with a colon' do
+           expect(entry "- task or project?:" ).to be_a Task
+        end
+
+        #todo other edge cases?
       end
 
       describe 'initialization' do
@@ -70,6 +74,7 @@ module TaskpaperTools
         end
       end
 
+
       describe 'unindented lines:' do
 
         describe 'not within a project' do
@@ -89,6 +94,15 @@ module TaskpaperTools
             second_entry = entry("project b:", first_entry)
             expect(first_entry.parent).to  eql document
             expect(second_entry.parent).to eql document
+          end
+
+          specify 'even when a project is preceded by an unindented task' do
+            document = Document.new
+            project_a = entry("project a:", document)
+            task_of_a = entry("- unindented", project_a)
+            project_b = entry("project b:", task_of_a)
+            expect(project_a.parent).to eql document
+            expect(project_b.parent).to eql document
           end
         end
 
