@@ -2,8 +2,6 @@ require "./lib/taskpaper_tools/entry"
 
 module TaskpaperTools
   describe Entry do
-    #todo: spec Document
-    #it "contains tasks and notes that don't belong to a projcect"
 
     def entry(text, previous_entry = Document.new)
       Entry.create text, previous_entry
@@ -141,7 +139,7 @@ module TaskpaperTools
             expect(project_b.parent).to eql project_a.parent
           end
 
-          #todo: edge cases
+          #todo: edge cases?
         end
 
       end
@@ -152,19 +150,7 @@ module TaskpaperTools
           expect(entry("\tOne on this line"       ).indents).to eql 1
           expect(entry("\t\tTwo on this line"     ).indents).to eql 2
           expect(entry("\t\t  Two here as well"   ).indents).to eql 2
-          expect(entry(" \tLeading spaces ignored").indents).to eql 1
         end
-      end
-
-    end
-
-    describe '#text:' do
-      it 'strips line terminators' do
-        expect(entry("a line\n").text).to eql 'a line'
-      end
-
-      it 'strips leading and trailing spaces while preserving tabs' do
-        expect(entry("  \tspacious  ").text).to eql "\tspacious"
       end
 
     end

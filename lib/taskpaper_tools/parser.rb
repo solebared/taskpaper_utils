@@ -9,9 +9,14 @@ module TaskpaperTools
 
     def parse enum
       document = Document.new
-      enum.reduce(document) { |preceding_entry, line| Entry.create(line, preceding_entry) }
+      enum.reduce(document) do |preceding_entry, line| 
+        Entry.create(clean(line), preceding_entry) 
+      end
       document
     end
 
+    def clean raw_text
+      raw_text.rstrip.sub(/\A */, '')
+    end
   end
 end

@@ -76,14 +76,10 @@ module TaskpaperTools
 
     private
 
-    def initialize(raw_text, preceding_entry)
-      @text = clean(raw_text)
+    def initialize(text, preceding_entry)
+      @text = text
       @parent = preceding_entry.find_parent_of(self)
       @parent.add_child self
-    end
-
-    def clean raw_text
-      raw_text.rstrip.sub(/\A */, '')
     end
   end
 

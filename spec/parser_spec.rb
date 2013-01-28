@@ -7,17 +7,17 @@ module TaskpaperTools
 
     describe '#parse' do
 
+      #todo: spec Document
+      #it "contains tasks and notes that don't belong to a projcect"
+
       describe 'returned object graph' do
-        #todo: remove indents for first set of tasks
-        let(:text) { <<-TEXT.gsub(/^ +/, '').split("\n")
-                      Project A:
+        let(:text) { "Project A:
                       - task one
                       \t- subtask
                       - task two
                       Project B:
                       \tnote
-                      \t\t- subtask of a note
-                     TEXT
+                      \t\t- subtask of a note".gsub(/^ +/, '').lines
         }
         let(:document) { parser.parse text }
         let(:projects) { document.children }  #todo: change this to .projects
@@ -33,8 +33,18 @@ module TaskpaperTools
           expect(project_a.children.size).to eql 2
           #todo: change this to project_a.tasks
         end
-
       end
     end
+
+    describe '#clean:' do
+      it 'strips line terminators' do
+        expect(parser.clean "a line\n").to eql 'a line'
+      end
+
+      it 'strips leading and trailing spaces while preserving tabs' do
+        expect(parser.clean "  \tspacious  ").to eql "\tspacious"
+      end
+    end
+
   end
 end
