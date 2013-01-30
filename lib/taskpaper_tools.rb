@@ -7,7 +7,7 @@ module TaskpaperTools
   end
   def self.save document, path
     File.open(path, 'w') do |file|
-      document.yield_text { |text| file.puts text }
+      document.yield_raw_text { |raw_text| file.puts raw_text }
     end
   end
 end

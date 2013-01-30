@@ -3,41 +3,60 @@ module TaskpaperTools
   # Internal: Groups methods included into Entry and Document
   module EntryContainer
 
+    module ClassMethods
+      def generate_readers_for_children_of_type *types
+        types.each do |type|
+          define_method("#{type.to_s}s") { children_of_type type }
+        end
+      end
+    end
+
     # Lazy initializes an array.  Provided only for convenience; the @children
     # ivar is not referenced, only the method
     #
     # Returns an object that responds to #<< and #each.
-    def children() 
+    def children
       @children ||= []
     end
 
     # Entry - We expect to hold Entry objects, however anything that responds
-    #         to #yield_text(&block) will work
+    #         to #yield_raw_text(&block) will work
     def add_child entry
       children << entry
     end
 
-    # Yields own text to the block and then recurses over children,
-    # effectively yielding the whole sub-tree of text rooted from this instance
-    def yield_text &block
-      yield text if respond_to? :text
-      children.each { |child| child.yield_text &block }
+    # Yields own raw text to the block and then recurses over children,
+    # effectively yielding the whole sub-tree of text rooted at this instance
+    def yield_raw_text &block
+      yield raw_text if respond_to? :raw_text
+      children.each { |child| child.yield_raw_text &block }
+    end
+
+    # Internal
+    #
+    # Symbol - symbolic representation of one of the Entry subclasses
+    def children_of_type entry_type
+      entry_class = TaskpaperTools.const_get(entry_type.capitalize)
+      children.select { |child| child.is_a? entry_class }
     end
   end
 
   class Entry
     include EntryContainer
+    extend  EntryContainer::ClassMethods
+
+    generate_readers_for_children_of_type :task, :note
 
     attr_reader :parent
-    attr_reader :text
+    attr_reader :raw_text
 
-    def self.create text, preceding_entry
+    def self.create raw_text, preceding_entry
       ( case
-        when text =~ /\A(\s*)?-/  then Task
-        when text.end_with?(':')  then Project
+        when raw_text =~ /\A(\s*)?-/  then Task
+        when raw_text.end_with?(':')  then Project
         else                           Note
         end
-      ).new text, preceding_entry
+      ).new raw_text, preceding_entry
     end
 
     def document
@@ -46,12 +65,12 @@ module TaskpaperTools
 
     # Internal
     def indents
-      text[/\A\t*/].size
+      raw_text[/\A\t*/].size
     end
 
     # Internal
     def to_s
-      text
+      raw_text
     end
 
     protected
@@ -76,24 +95,37 @@ module TaskpaperTools
 
     private
 
-    def initialize(text, preceding_entry)
-      @text = text
+    def initialize(raw_text, preceding_entry)
+      @raw_text = raw_text
       @parent = preceding_entry.find_parent_of(self)
       @parent.add_child self
     end
   end
 
   class Project < Entry
+    def text
+      raw_text.sub /:$/, ''
+    end
   end
 
   class Task < Entry
+    alias :subtasks :tasks
+    def text
+      raw_text.strip.sub /^- /, ''
+    end
   end
 
   class Note < Entry
+    def text
+      raw_text
+    end
   end
 
   class Document
     include EntryContainer
+    extend  EntryContainer::ClassMethods
+
+    generate_readers_for_children_of_type :project, :task, :note
 
     def find_parent_of other
       self  # **I** am your father... you know this to be true (i have no ancestors)
