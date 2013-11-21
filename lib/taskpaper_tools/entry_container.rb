@@ -20,7 +20,7 @@ module TaskpaperTools
     end
 
     # Entry - We expect to hold Entry objects, however anything that responds
-    #         to #yield_raw_text(&block) will work
+    #         to #yield_raw_text(&block) and #type?(:document|:project|:task|:note) will work
     def add_child entry
       children << entry
       entry.parent = self
@@ -37,8 +37,11 @@ module TaskpaperTools
     #
     # Symbol - symbolic representation of one of the Entry subclasses
     def children_of_type entry_type
-      entry_class = TaskpaperTools.const_get(entry_type.capitalize)
-      children.select { |child| child.is_a? entry_class }
+      children.select { |child| child.type? entry_type }
+    end
+
+    def type?(of)
+      self.class.name.split('::').last.to_sym.downcase == of
     end
   end
 end

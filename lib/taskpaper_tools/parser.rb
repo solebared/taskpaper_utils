@@ -31,18 +31,15 @@ module TaskpaperTools
     end
 
     def find_parent_of(current_entry, preceding_entry)
-      return preceding_entry unless preceding_entry.parent
-
-      if preceding_entry.indents < current_entry.indents
-        preceding_entry
-      elsif preceding_entry.indents == current_entry.indents
-        select_parent_of_equally_indented_entry(current_entry, preceding_entry)
-      else
-        find_parent_of(current_entry, preceding_entry.parent)
+      return preceding_entry if preceding_entry.type? :document
+      case preceding_entry.indents <=> current_entry.indents
+      when -1 then preceding_entry
+      when  0 then select_parent_of_equally_indented_entry(current_entry, preceding_entry)
+      when  1 then find_parent_of(current_entry, preceding_entry.parent)
       end
     end
 
-    def select_parent_of_equally_indented_entry current_entry, preceding_entry
+    def select_parent_of_equally_indented_entry(current_entry, preceding_entry)
       if preceding_entry.indents == 0
         return preceding_entry.document if current_entry.is_a?(Project)
         return preceding_entry if preceding_entry.is_a?(Project)
