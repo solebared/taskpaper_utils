@@ -34,7 +34,7 @@ module TaskpaperTools
     # effectively yielding the whole sub-tree of text rooted at this instance
     def yield_raw_text &block
       yield raw_text if respond_to? :raw_text
-      children.each { |child| child.yield_raw_text &block }
+      children.each { |child| child.yield_raw_text(&block) }
     end
 
     # Internal

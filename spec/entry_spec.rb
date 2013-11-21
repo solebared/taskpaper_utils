@@ -21,12 +21,13 @@ module TaskpaperTools
         #todo other edge cases?
       end
 
+      #todo move to entry_container, or get rid of this?
       describe 'initialization' do
-        it 'requires a line of text and an Entry representing the preceding line' do
-          expect {
-            first = entry("The first line has no preceding one - we pass the Document", Document.new)
-            second = entry("subsequent lines are initialized with their predecessor", first)
-          }.to_not raise_error
+        it 'needs to be attached to a parent' do
+          project_entry = parser.create_entry("project:")
+          task_entry    = parser.create_entry("- task")
+          project_entry.add_child(task_entry)
+          expect(task_entry.parent).to eql project_entry
         end
       end
 
@@ -63,7 +64,7 @@ module TaskpaperTools
         end
 
         it "appends itself to the end of the parent's collection of children" , pending: 'move to parser_spec' do
-          fourth = entry("\t- task z", third)
+          fourth = entry("\t- task z", first)
           expect(first.children.last).to be fourth
         end
       end
