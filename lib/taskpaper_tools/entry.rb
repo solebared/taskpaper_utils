@@ -1,10 +1,9 @@
 module TaskpaperTools
 
   class Entry
-    include EntryContainer
-    extend  EntryContainer::ClassMethods
-
-    generate_readers_for_children_of_type :task, :note
+    EntryContainer
+      .include_into(self)
+      .generate_readers_for_children_of_type :task, :note
 
     attr_accessor :parent
     attr_reader   :raw_text
