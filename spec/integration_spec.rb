@@ -20,8 +20,6 @@ module TaskpaperTools
           end
         end
       end
-
-
     end
   end
 end

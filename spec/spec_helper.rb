@@ -15,3 +15,14 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 end
+
+require_relative '../lib/taskpaper_tools'
+
+module TaskpaperTools
+  module EntrySpecHelpers
+    def entry(raw_text, previous_entry = ::TaskpaperTools::Document.new)
+      ::TaskpaperTools::Entry.create raw_text, previous_entry
+    end
+  end
+end
+
