@@ -137,7 +137,7 @@ module TaskpaperTools
 
         RSpec::Matchers.define :be_identified_as_the_parent_given do |preceding_entry, current_entry|
           match do |expected_parent|
-            parser.find_parent_of(preceding_entry, current_entry) == expected_parent
+            parser.find_parent_of(current_entry, preceding_entry) == expected_parent
           end
         end
       end

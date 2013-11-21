@@ -6,16 +6,11 @@ module TaskpaperTools
 
     generate_readers_for_children_of_type :task, :note
 
-    attr_reader :parent
-    attr_reader :raw_text
+    attr_accessor :parent
+    attr_reader   :raw_text
 
     def document
       parent.document
-    end
-
-    def parent=(parent)
-      @parent = parent
-      @parent.add_child self
     end
 
     # Internal

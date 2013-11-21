@@ -10,9 +10,9 @@ module TaskpaperTools
     def parse enum
       document = Document.new
       enum.reduce(document) do |preceding_entry, line| 
-        current_entry = create_entry(clean(line)) 
-        current_entry.parent = find_parent_of(preceding_entry, current_entry)
-        current_entry
+        create_entry(clean(line)).tap do |current_entry|
+          find_parent_of(current_entry, preceding_entry).add_child(current_entry)
+        end
       end
       document
     end
@@ -30,21 +30,21 @@ module TaskpaperTools
       raw_text.rstrip.sub(/\A */, '')
     end
 
-    def find_parent_of(preceding_entry, next_entry)
+    def find_parent_of(current_entry, preceding_entry)
       return preceding_entry unless preceding_entry.parent
 
-      if preceding_entry.indents < next_entry.indents
+      if preceding_entry.indents < current_entry.indents
         preceding_entry
-      elsif preceding_entry.indents == next_entry.indents
-        select_parent_of_equally_indented_entry(preceding_entry, next_entry)
+      elsif preceding_entry.indents == current_entry.indents
+        select_parent_of_equally_indented_entry(current_entry, preceding_entry)
       else
-        find_parent_of(preceding_entry.parent, next_entry)
+        find_parent_of(current_entry, preceding_entry.parent)
       end
     end
 
-    def select_parent_of_equally_indented_entry preceding_entry, next_entry
+    def select_parent_of_equally_indented_entry current_entry, preceding_entry
       if preceding_entry.indents == 0
-        return preceding_entry.document if next_entry.is_a?(Project)
+        return preceding_entry.document if current_entry.is_a?(Project)
         return preceding_entry if preceding_entry.is_a?(Project)
       end
       return preceding_entry.parent

@@ -23,6 +23,7 @@ module TaskpaperTools
     #         to #yield_raw_text(&block) will work
     def add_child entry
       children << entry
+      entry.parent = self
     end
 
     # Yields own raw text to the block and then recurses over children,

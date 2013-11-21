@@ -25,9 +25,9 @@ module TaskpaperTools
     end
 
     def entry(raw_text, parent = ::TaskpaperTools::Document.new)
-      entry = parser.create_entry(raw_text)
-      entry.parent = parent
-      entry
+      parser.create_entry(raw_text).tap do |entry|
+        parent.add_child(entry)
+      end
     end
   end
 end
