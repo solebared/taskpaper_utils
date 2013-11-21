@@ -1,4 +1,4 @@
-require './lib/taskpaper_tools'
+require 'spec_helper'
 require 'tempfile'
 
 module TaskpaperTools
