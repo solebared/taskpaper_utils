@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.name          = "taskpaper_tools"
   gem.version       = TaskpaperTools::VERSION
   gem.authors       = ["lasitha ranatunga"]
-  gem.email         = ["an4rcho@gmail.com"]
+  gem.email         = ["exbinary@gmail.com"]
   gem.description   = %q{TODO: Write a gem description}
   gem.summary       = %q{TODO: Write a gem summary}
   gem.homepage      = ""

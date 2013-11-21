@@ -1,4 +1,4 @@
-Copyright (c) 2013 lasitha ranatunga (an4rcho@gmail.com)
+Copyright (c) 2013 lasitha ranatunga (exbinary@gmail.com)
 
 MIT License
 

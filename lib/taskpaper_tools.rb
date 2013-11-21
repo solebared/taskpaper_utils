@@ -1,5 +1,6 @@
-require "taskpaper_tools/version"
-require "taskpaper_tools/parser"
+%w(version entry_container document entry project task note parser ).each do |lib|
+  require "taskpaper_tools/#{lib}"
+end
 
 module TaskpaperTools
   def self.parse file

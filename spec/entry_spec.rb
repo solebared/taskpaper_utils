@@ -1,4 +1,4 @@
-require "./lib/taskpaper_tools/entry"
+require "./lib/taskpaper_tools"
 
 module TaskpaperTools
   describe Entry do
