@@ -20,8 +20,14 @@ require_relative '../lib/taskpaper_tools'
 
 module TaskpaperTools
   module EntrySpecHelpers
-    def entry(raw_text, previous_entry = ::TaskpaperTools::Document.new)
-      ::TaskpaperTools::Entry.create raw_text, previous_entry
+    def parser
+      @parser ||= ::TaskpaperTools::Parser.new
+    end
+
+    def entry(raw_text, parent = ::TaskpaperTools::Document.new)
+      entry = parser.create_entry(raw_text)
+      entry.parent = parent
+      entry
     end
   end
 end

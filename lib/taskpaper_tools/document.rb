@@ -6,8 +6,8 @@ module TaskpaperTools
 
     generate_readers_for_children_of_type :project, :task, :note
 
-    def find_parent_of other
-      self  # **I** am your father... you know this to be true
+    def parent
+      nil
     end
 
     def document
