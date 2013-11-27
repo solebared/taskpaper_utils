@@ -13,11 +13,6 @@ module TaskpaperTools
     end
 
     # Internal
-    def indents
-      raw_text[/\A\t*/].size
-    end
-
-    # Internal
     def to_s
       raw_text
     end
