@@ -2,7 +2,7 @@ require 'taskpaper_tools/entry'
 
 module TaskpaperTools
   class Parser
-    include TextUtility
+    include TextUtils
 
     def parse_file(path)
       File.open(path) { |file| parse file }

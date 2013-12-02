@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module TaskpaperTools
 
-  describe TextUtility do
-    include TextUtility
+  describe TextUtils do
+    include TextUtils
 
     def entry(raw_text)
       #anything that provides a raw_text methd
