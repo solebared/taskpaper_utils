@@ -1,5 +1,5 @@
 module TaskpaperTools
-  class TextUtility
+  module TextUtility
 
     def indents(entry)
       entry.raw_text[/\A\t*/].size
@@ -16,5 +16,6 @@ module TaskpaperTools
     def strip_leave_indents(raw_text)
       raw_text.rstrip.sub(/\A */, '')
     end
+
   end
 end
