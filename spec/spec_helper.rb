@@ -18,17 +18,3 @@ end
 
 require_relative '../lib/taskpaper_tools'
 
-module TaskpaperTools
-  module EntrySpecHelpers
-    def parser
-      @parser ||= ::TaskpaperTools::Parser.new
-    end
-
-    def entry(raw_text, parent = ::TaskpaperTools::Document.new)
-      parser.create_entry(raw_text).tap do |entry|
-        parent.add_child(entry)
-      end
-    end
-  end
-end
-

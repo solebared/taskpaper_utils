@@ -28,6 +28,7 @@ module TaskpaperTools
     def add_child entry
       children << entry
       entry.parent = self
+      entry
     end
 
     # Yields own raw text to the block and then recurses over children,
