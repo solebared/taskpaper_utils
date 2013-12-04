@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'tempfile'
 
 module TaskpaperTools
-  describe TaskpaperTools, "integration:" do
+  describe TaskpaperTools, 'integration:' do
 
     describe 'parsing and immediately saving the parsed object graph' do
 

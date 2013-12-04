@@ -17,4 +17,3 @@ RSpec.configure do |config|
 end
 
 require_relative '../lib/taskpaper_tools'
-

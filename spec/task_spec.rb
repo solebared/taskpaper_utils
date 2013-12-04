@@ -1,11 +1,11 @@
-require "spec_helper"
+require 'spec_helper'
 
 module TaskpaperTools
   describe Task do
 
     describe '#text' do
       it 'strips leading dash' do
-        expect(Task.new(  "- task").text).to eql 'task'
+        expect(Task.new('- task').text).to eql 'task'
       end
       it 'strips leading tab as well' do
         expect(Task.new("\t- task").text).to eql 'task'
@@ -16,7 +16,7 @@ module TaskpaperTools
       task = Task.new('- task')
       expect {
         task.add_child(Task.new("\t- subtask"))
-      }.to change{ 
+      }.to change { 
         task.subtasks.size
       }.by(1)
     end

@@ -12,7 +12,7 @@ module TaskpaperTools
     end
 
     def to_s
-      "==Document=="
+      '==Document=='
     end
   end
 end

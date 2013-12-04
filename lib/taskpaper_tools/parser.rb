@@ -10,7 +10,7 @@ module TaskpaperTools
 
     def parse(enum)
       document = Document.new
-      enum.reduce(document) do |preceding_entry, line| 
+      enum.reduce(document) do |preceding_entry, line|
         create_entry(line).tap do |current_entry|
           find_parent_of(current_entry, preceding_entry).add_child(current_entry)
         end
@@ -42,7 +42,7 @@ module TaskpaperTools
         return preceding_entry.document if current_entry.is_a?(Project)
         return preceding_entry if preceding_entry.is_a?(Project)
       end
-      return preceding_entry.parent
+      preceding_entry.parent
     end
   end
 end

@@ -1,7 +1,7 @@
-require "spec_helper"
+require 'spec_helper'
 
 module TaskpaperTools
-  describe Parser, "integration:" do
+  describe Parser, 'integration:' do
 
     let(:parser) { Parser.new }
 
@@ -19,25 +19,25 @@ module TaskpaperTools
 
       it 'contains projects' do
         expect(projects.size).to eql 2
-        expect(projects.map(&:text)).to eql ["Project A", "Project B"]
+        expect(projects.map(&:text)).to eql ['Project A', 'Project B']
       end
 
       it 'contains tasks within projects' do
         project_a = projects.first
         expect(project_a.tasks.size).to eql 2
-        expect(project_a.tasks.map(&:text)).to eql ["task one", "task two"]
+        expect(project_a.tasks.map(&:text)).to eql ['task one', 'task two']
       end
 
       it 'contains subtasks nested under tasks' do
         task_one = projects.first.tasks.first
         expect(task_one.subtasks.size).to eql 1
-        expect(task_one.subtasks.first.text).to eql "subtask"
+        expect(task_one.subtasks.first.text).to eql 'subtask'
       end
 
       it 'contains notes within projects' do
         notes = projects.first.notes
         expect(notes.size).to eql 1
-        expect(notes.first.text).to eql "a note"
+        expect(notes.first.text).to eql 'a note'
       end
     end
 
@@ -59,9 +59,8 @@ module TaskpaperTools
 
     end
 
-    def lines string
+    def lines(string)
       string.gsub(/^ +/, '').lines
     end
   end
 end
-
