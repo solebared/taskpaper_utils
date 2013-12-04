@@ -28,15 +28,15 @@ module TaskpaperTools
 
     describe '#compare_indents' do
       it 'returns 0 if both entries have equal indents' do
-        expect(compare_indents(entry("a"), entry("b"))).to   eql  0
+        expect(compare_indents(entry("a"), entry("b"))).to   eql( 0)
       end
 
       it 'returns -1 if the first entry is indented less than the second' do
-        expect(compare_indents(entry("a"), entry("\tb"))).to eql -1
+        expect(compare_indents(entry("a"), entry("\tb"))).to eql(-1)
       end
 
       it 'returns +1 if the first entry is indented more than the second' do
-        expect(compare_indents(entry("\ta"), entry("b"))).to eql  1
+        expect(compare_indents(entry("\ta"), entry("b"))).to eql( 1)
       end
     end
 
