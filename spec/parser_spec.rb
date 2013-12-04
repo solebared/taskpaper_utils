@@ -8,9 +8,9 @@ module TaskpaperTools
     describe '#create_entry' do
 
       describe 'recognizes basic entry types' do
-        it ('recognizes a project') { expect(entry('a project:')).to be_a Project }
-        it ('recognizes a task   ') { expect(entry('- a task'  )).to be_a Task    }
-        it ('recognizes a note   ') { expect(entry('a note'    )).to be_a Note    }
+        it('recognizes a project') { expect(entry('a project:')).to be_a Project }
+        it('recognizes a task   ') { expect(entry('- a task'  )).to be_a Task    }
+        it('recognizes a note   ') { expect(entry('a note'    )).to be_a Note    }
       end
 
       describe 'edge cases:' do

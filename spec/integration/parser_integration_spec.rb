@@ -6,15 +6,17 @@ module TaskpaperTools
     let(:parser) { Parser.new }
 
     describe 'a simple document' do
-      let(:document) { parser.parse(lines(
-        "Project A:
-         - task one
-         \t- subtask
-         - task two
-         a note
-         \t- subtask of a note
-         Project B:"
-      ))}
+      let(:document) do
+        parser.parse(lines(
+          "Project A:
+           - task one
+           \t- subtask
+           - task two
+           a note
+           \t- subtask of a note
+           Project B:"
+        ))
+      end
       let(:projects) { document.projects }
 
       it 'contains projects' do
@@ -42,13 +44,15 @@ module TaskpaperTools
     end
 
     describe 'a document with notes and tasks outside of projects' do
-      let(:document) { parser.parse(lines(
-        "a note
-         - a task
-         another note
-         a project:
-         - with a task"
-      ))}
+      let(:document) do
+        parser.parse(lines(
+          "a note
+           - a task
+           another note
+           a project:
+           - with a task"
+        ))
+      end
 
       it 'adopts the unowned entries' do
         expect(document.children.size).to eql 4
