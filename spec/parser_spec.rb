@@ -14,27 +14,15 @@ module TaskpaperTools
       end
 
       describe 'edge cases:' do
-
         it 'recognizes tasks that end with a colon' do
            expect(entry "- task or project?:" ).to be_a Task
         end
-
         #todo other edge cases?
-      end
-
-      #todo move to entry_container, or get rid of this?
-      describe 'initialization' do
-        it 'needs to be attached to a parent' do
-          project_entry = parser.create_entry("project:")
-          task_entry    = parser.create_entry("- task")
-          project_entry.add_child(task_entry)
-          expect(task_entry.parent).to eql project_entry
-        end
       end
 
     end
 
-    describe '#find_parent_of' do
+    describe 'parent indentification' do
 
       #todo: what happens to blank lines? -- always a child of previous entry?
 
@@ -42,11 +30,11 @@ module TaskpaperTools
         let(:first)  { entry("project:") }
         let(:second) { entry("\t- task x", first) }
 
-        it "identifies the previous entry as it's parent" do
+        it "identifies the previous entry as the parent" do
           expect(parent_of(second, first)).to eql first
         end
 
-        it "adds itself as a child of the preceding entry", pending: 'move to parser_spec' do
+        it "adds the current entry as a child of the preceding entry" do
           expect(first.children).to include(second)
         end
       end
@@ -56,15 +44,15 @@ module TaskpaperTools
         let(:second) { entry("\t- task x", first) }
         let(:third)  { entry("\t- task y", first) }
 
-        it "sets the preceding entry's parent as it's own parent" do
+        it "identifies the preceding entry's parent as the current entry's own parent" do
           expect(parent_of(third, second)).to eql first
         end
 
-        it "adds itself as a child of the preceding entry's parent", pending: 'move to parser_spec'  do
+        it "adds the current entry as a child of the preceding entry's parent" do
           expect(first.children).to include(third)
         end
 
-        it "appends itself to the end of the parent's collection of children" , pending: 'move to parser_spec' do
+        it "appends the current entry to the end of the parent's collection of children" do
           fourth = entry("\t- task z", first)
           expect(first.children.last).to be fourth
         end
@@ -80,7 +68,7 @@ module TaskpaperTools
             second = entry("line two", document)
             expect(parent_of(first, document)).to eql document
             expect(parent_of(second, first)).to eql document
-            #todo: move to parser? expect(document.children.size).to eql 2
+            expect(document.children.size).to eql 2
           end
 
           specify 'including projects on consecutive lines' do

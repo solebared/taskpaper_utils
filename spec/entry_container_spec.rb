@@ -11,8 +11,8 @@ module TaskpaperTools
 
       it "provides it's children's raw text to the collector" do
         project = Project.new("project:")
-        task = project.add_child Task.new("\t- task")
-               project.add_child Task.new("\t\t- subtask")
+        project.add_child Task.new("\t- task")
+        project.add_child Task.new("\t\t- subtask")
         expect{ |b| project.yield_raw_text(&b) }
         .to yield_successive_args "project:", "\t- task", "\t\t- subtask"
       end
@@ -37,6 +37,17 @@ module TaskpaperTools
         expect(project.children_of_type(:task)).to include task
         expect(project.children_of_type(:task)).to_not include note
       end
+
+    end
+
+    describe '#add_child' do
+
+      specify "adding a child sets it's parent" do
+        project = Project.new("project:")
+        task    = project.add_child Task.new("- task")
+        expect(task.parent).to eql project
+      end
+
     end
   end
 end
