@@ -1,9 +1,7 @@
 module TaskpaperTools
 
   class Entry
-    EntryContainer
-      .include_into(self)
-      .generate_readers_for_children_of_type :task, :note
+    (include EntryContainer).for_children_of_type :task, :note
 
     attr_accessor :parent
     attr_reader   :raw_text

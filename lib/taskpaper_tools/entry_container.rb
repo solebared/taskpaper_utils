@@ -3,16 +3,16 @@ module TaskpaperTools
   # Internal: Groups methods included into Entry and Document
   module EntryContainer
 
-    def self.include_into(klass)
-      klass.instance_eval do
-        include EntryContainer
-        def self.generate_readers_for_children_of_type *types
-          types.each do |type|
-            define_method("#{type.to_s}s") { children_of_type type }
-          end
+    module Generators
+      def for_children_of_type *types
+        types.each do |type|
+          define_method("#{type.to_s}s") { children_of_type type }
         end
       end
-      klass
+    end
+
+    def self.included(klass)
+      klass.extend EntryContainer::Generators
     end
 
     # Lazy initializes an array.  Provided only for convenience; the @children

@@ -1,9 +1,7 @@
 module TaskpaperTools
 
   class Document
-    EntryContainer
-      .include_into(self)
-      .generate_readers_for_children_of_type :project, :task, :note
+    (include EntryContainer).for_children_of_type :project, :task, :note
 
     def parent
       nil
