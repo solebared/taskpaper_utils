@@ -1,2 +1,0 @@
-all:
-	clear && rspec
