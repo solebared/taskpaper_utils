@@ -9,15 +9,15 @@ module TaskpaperTools
 
       describe 'recognizes basic entry types' do
         it('recognizes a project') { expect(entry('a project:')).to be_a Project }
-        it('recognizes a task   ') { expect(entry('- a task'  )).to be_a Task    }
-        it('recognizes a note   ') { expect(entry('a note'    )).to be_a Note    }
+        it('recognizes a task   ') { expect(entry('- a task  ')).to be_a Task    }
+        it('recognizes a note   ') { expect(entry('a note    ')).to be_a Note    }
       end
 
       describe 'edge cases:' do
         it 'recognizes tasks that end with a colon' do
-           expect(entry '- task or project?:').to be_a Task
+          expect(entry '- task or project?:').to be_a Task
         end
-        # todo other edge cases?
+        # todo: other edge cases?
       end
 
     end
@@ -52,7 +52,7 @@ module TaskpaperTools
           expect(first.children).to include(third)
         end
 
-        it "appends the current entry to the end of the parent's collection of children" do
+        it "appends current entry to the end of parent's collection of children" do
           fourth = entry("\t- task z", first)
           expect(first.children.last).to be fourth
         end
@@ -99,12 +99,12 @@ module TaskpaperTools
 
       describe 'multiple indents and outdents:' do
         let(:document)     { Document.new }
-        let(:project_a)    { entry('project a:',              document ) }
-        let(:task_x)       { entry("\t- task x",              project_a) }
-        let(:subtask_of_x) { entry("\t\t- subtask of task x", task_x   ) }
-        let(:task_y)       { entry("\t- task y",              project_a) }
-        let(:subtask_of_y) { entry("\t\t- subtask of task y", task_y   ) }
-        let(:project_b)    { entry('project b:',              document ) }
+        let(:project_a)    { entry 'project a:',              document  }
+        let(:task_x)       { entry "\t- task x",              project_a }
+        let(:subtask_of_x) { entry "\t\t- subtask of task x", task_x    }
+        let(:task_y)       { entry "\t- task y",              project_a }
+        let(:subtask_of_y) { entry "\t\t- subtask of task y", task_y    }
+        let(:project_b)    { entry 'project b:',              document  }
 
         specify 'subtasks are children of tasks' do
           expect(parent_of(subtask_of_x, task_x)).to eql task_x

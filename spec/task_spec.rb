@@ -14,11 +14,8 @@ module TaskpaperTools
 
     it 'aliases #tasks as #subtasks' do
       task = Task.new('- task')
-      expect {
-        task.add_child(Task.new("\t- subtask"))
-      }.to change { 
-        task.subtasks.size
-      }.by(1)
+      task.add_child(Task.new("\t- subtask"))
+      expect(task.subtasks).to eql(task.tasks)
     end
 
   end

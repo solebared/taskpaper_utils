@@ -1,8 +1,7 @@
 module TaskpaperTools
-
   # Internal: Groups methods included into Entry and Document
   module EntryContainer
-
+    # Class methods mixed into host when EntryContainer is included
     module Generators
       def for_children_of_type(*types)
         types.each do |type|
@@ -24,7 +23,8 @@ module TaskpaperTools
     end
 
     # Entry - We expect to hold Entry objects, however anything that responds
-    #         to #yield_raw_text(&block) and #type?(:document|:project|:task|:note) will work
+    #         to #yield_raw_text(&block) and #type?(:document|:project|:task|:note)
+    #         will work
     def add_child(entry)
       children << entry
       entry.parent = self

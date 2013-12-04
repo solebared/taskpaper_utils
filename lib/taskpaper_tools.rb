@@ -1,4 +1,5 @@
-%w(version text_utils entry_container document entry project task note parser ).each do |lib|
+%w(version text_utils entry_container
+   document entry project task note parser).each do |lib|
   require "taskpaper_tools/#{lib}"
 end
 

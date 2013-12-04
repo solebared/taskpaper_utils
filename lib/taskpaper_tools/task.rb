@@ -1,6 +1,6 @@
 module TaskpaperTools
   class Task < Entry
-    alias :subtasks :tasks
+    alias_method :subtasks, :tasks
     def text
       raw_text.strip.sub(/^- /, '')
     end

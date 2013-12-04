@@ -1,5 +1,4 @@
 module TaskpaperTools
-
   class Entry
     (include EntryContainer).for_children_of_type :task, :note
 
