@@ -4,4 +4,5 @@ Gemfile.lock
 Makefile
 coverage/
 tmp/
+taskpaper_tools-*.gem
 todo.md

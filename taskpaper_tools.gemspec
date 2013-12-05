@@ -8,7 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = TaskpaperTools::VERSION
   gem.authors       = ["lasitha ranatunga"]
   gem.email         = ["exbinary@gmail.com"]
-  gem.summary       = %q{Parse and work with TaskPaper documents.}
+  gem.summary       = %q{Parse and work with TaskPaper formatted documents.}
+  gem.license       = 'LGPL-3.0'
   gem.homepage      = "https://github.com/exbinary/taskpaper_tools"
   gem.description   = %{
     Simple library for working with TaskPaper formatted documents.
