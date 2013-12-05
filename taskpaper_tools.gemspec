@@ -12,8 +12,9 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{TODO: Write a gem summary}
   gem.homepage      = ""
 
-  gem.add_development_dependency 'rspec', '~> 2.14.0'
-  gem.add_development_dependency 'simplecov', '~> 0.8.0'
+  gem.add_development_dependency 'rspec',     '~> 2.14.0'
+  gem.add_development_dependency 'rubocop',   '~> 0.15.0'
+  gem.add_development_dependency 'simplecov', '~> 0.08.0'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
