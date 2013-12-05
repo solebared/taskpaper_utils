@@ -8,16 +8,20 @@ Gem::Specification.new do |gem|
   gem.version       = TaskpaperTools::VERSION
   gem.authors       = ["lasitha ranatunga"]
   gem.email         = ["exbinary@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.summary       = %q{Parse and work with TaskPaper documents.}
+  gem.homepage      = "https://github.com/exbinary/taskpaper_tools"
+  gem.description   = %{
+    Simple library for working with TaskPaper formatted documents.
+    Parse a TaskPaper document, work with the resulting set of
+    model objects and reserialize.
+  }
 
-  gem.add_development_dependency 'rspec',     '~> 2.14.0'
-  gem.add_development_dependency 'rubocop',   '~> 0.15.0'
-  gem.add_development_dependency 'simplecov', '~> 0.08.0'
+  gem.add_development_dependency 'rspec',     '~> 2.14'
+  gem.add_development_dependency 'rubocop',   '~> 0.15'
+  gem.add_development_dependency 'simplecov', '~> 0.08'
 
+  # todo: depending on git here may not be portable
   gem.files         = `git ls-files`.split($/)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.test_files    = gem.files.grep(%r{^spec/})
   gem.require_paths = ["lib"]
 end
