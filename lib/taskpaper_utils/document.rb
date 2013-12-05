@@ -1,4 +1,4 @@
-module TaskpaperTools
+module TaskpaperUtils
   class Document
     (include EntryContainer).for_children_of_type :project, :task, :note
 

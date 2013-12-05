@@ -1,16 +1,16 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'taskpaper_tools/version'
+require 'taskpaper_utils/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "taskpaper_tools"
-  gem.version       = TaskpaperTools::VERSION
+  gem.name          = "taskpaper_utils"
+  gem.version       = TaskpaperUtils::VERSION
   gem.authors       = ["lasitha ranatunga"]
   gem.email         = ["exbinary@gmail.com"]
   gem.summary       = %q{Parse and work with TaskPaper formatted documents.}
   gem.license       = 'LGPL-3.0'
-  gem.homepage      = "https://github.com/exbinary/taskpaper_tools"
+  gem.homepage      = "https://github.com/exbinary/taskpaper_utils"
   gem.description   = %{
     Simple library for working with TaskPaper formatted documents.
     Parse a TaskPaper document, work with the resulting set of

@@ -1,3 +1,3 @@
-module TaskpaperTools
+module TaskpaperUtils
   VERSION = '0.1.0'
 end

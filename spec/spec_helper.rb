@@ -20,4 +20,4 @@ end
 require 'simplecov'
 SimpleCov.start
 
-require_relative '../lib/taskpaper_tools'
+require_relative '../lib/taskpaper_utils'

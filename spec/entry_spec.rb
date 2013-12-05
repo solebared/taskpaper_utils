@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module TaskpaperTools
+module TaskpaperUtils
   describe Entry do
 
     let(:entry) { Entry.new('any entry') }

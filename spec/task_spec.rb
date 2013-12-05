@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module TaskpaperTools
+module TaskpaperUtils
   describe Task do
 
     describe '#text' do

@@ -1,6 +1,6 @@
-require 'taskpaper_tools/entry'
+require 'taskpaper_utils/entry'
 
-module TaskpaperTools
+module TaskpaperUtils
   class Parser
     include TextUtils
 

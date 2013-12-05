@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'tempfile'
 
-module TaskpaperTools
-  describe TaskpaperTools, 'integration:' do
+module TaskpaperUtils
+  describe TaskpaperUtils, 'integration:' do
 
     describe 'parsing and immediately saving the parsed object graph' do
 
@@ -12,10 +12,10 @@ module TaskpaperTools
         # since the new file is based on the object graph, this serves as a good
         # integration test - anything we either don't parse or serialize correctly
         # will result in differing files
-        document = TaskpaperTools.parse(exemplar_path)
-        Dir::Tmpname.create('taskpaper_tools_integration_spec-') do |new_file|
+        document = TaskpaperUtils.parse(exemplar_path)
+        Dir::Tmpname.create('taskpaper_utils_integration_spec-') do |new_file|
           begin
-            TaskpaperTools.save(document, new_file)
+            TaskpaperUtils.save(document, new_file)
             expect(File.read(exemplar_path)).to eql(File.read(new_file))
           ensure
             File.delete(new_file) if File.exist?(new_file)

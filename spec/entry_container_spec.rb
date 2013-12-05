@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-module TaskpaperTools
+module TaskpaperUtils
   describe EntryContainer do
 
     describe '#yield_raw_text' do

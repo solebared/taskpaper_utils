@@ -1,4 +1,4 @@
-module TaskpaperTools
+module TaskpaperUtils
   class Note < Entry
     def text
       raw_text

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-module TaskpaperTools
+module TaskpaperUtils
   describe Parser do
 
-    let(:parser) { ::TaskpaperTools::Parser.new }
+    let(:parser) { ::TaskpaperUtils::Parser.new }
 
     describe '#create_entry' do
 
@@ -131,7 +131,7 @@ module TaskpaperTools
       end
     end
 
-    def entry(raw_text, parent = ::TaskpaperTools::Document.new)
+    def entry(raw_text, parent = ::TaskpaperUtils::Document.new)
       parser.create_entry(raw_text).tap do |entry|
         parent.add_child(entry)
       end

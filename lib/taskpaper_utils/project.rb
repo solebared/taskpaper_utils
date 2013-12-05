@@ -1,4 +1,4 @@
-module TaskpaperTools
+module TaskpaperUtils
   class Project < Entry
     def text
       raw_text.sub(/:$/, '')

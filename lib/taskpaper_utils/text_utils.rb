@@ -1,4 +1,4 @@
-module TaskpaperTools
+module TaskpaperUtils
   module TextUtils
     def indents(entry)
       entry.raw_text[/\A\t*/].size

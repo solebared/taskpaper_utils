@@ -1,4 +1,4 @@
-module TaskpaperTools
+module TaskpaperUtils
   class Task < Entry
     alias_method :subtasks, :tasks
     def text

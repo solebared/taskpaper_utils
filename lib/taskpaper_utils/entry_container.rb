@@ -1,4 +1,4 @@
-module TaskpaperTools
+module TaskpaperUtils
   # Internal: Groups methods included into Entry and Document
   module EntryContainer
     # Class methods mixed into host when EntryContainer is included
