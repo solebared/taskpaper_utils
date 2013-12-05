@@ -2,4 +2,6 @@
 .virb/
 Gemfile.lock
 Makefile
+coverage/
+tmp/
 todo.md

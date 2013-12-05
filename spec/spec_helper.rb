@@ -16,4 +16,8 @@ RSpec.configure do |config|
   config.order = 'random'
 end
 
+# todo: do this only if ENV['COVERAGE'] is set
+require 'simplecov'
+SimpleCov.start
+
 require_relative '../lib/taskpaper_tools'
