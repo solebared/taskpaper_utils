@@ -1,9 +1,10 @@
-# TaskpaperUtils
+# taskpaper_utils
+[![LGPLv3](http://www.gnu.org/graphics/lgplv3-88x31.png)](http://www.gnu.org/licenses/lgpl.html)
 [![Code Climate](https://codeclimate.com/github/exbinary/taskpaper_utils.png)](https://codeclimate.com/github/exbinary/taskpaper_utils)
 
 Simple ruby library for parsing and working with [TaskPaper] formatted documents.
 
-The [TaskPaper] format is defined by [Hog Bay Software](http://www.hogbaysoftware.com/) for use in their excellent [TaskPaper] OS X app.  It is designed to be human readable and universally portable as plain text.
+The [TaskPaper] format is defined by [Hog Bay Software] for use in their excellent [TaskPaper] OS X app.  It is designed to be human readable and universally portable as plain text.
 
 This library:
 
@@ -69,7 +70,19 @@ Of course i always value [questions, feedback, code review](https://github.com/e
 * The TaskPaper [wiki](http://www.hogbaysoftware.com/wiki/TaskPaper), including a list of related tools.
 * An alternative ruby library named [taskpaper-tools](https://github.com/thiagoa/taskpaper-tools), also in early development as of this writing.
 
+## License and Copyright
+Copyright 2013 lasitha ranatunga.
+
+This program (the 'taskpaper_utils' library, including all source files therein) is free software: you can redistribute it and/or modify it under the terms of the Lesser GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but _without any warranty_; without even the implied warranty of _merchantability_ or _fitness for a particular purpose_.  See the Lesser GNU General Public License for more details.
+
+The Lesser GNU General Public License and the GNU General Public License can be found alongside this file as [LICENSE.lesser](LICENSE.lesser) and [LICENSE](LICENSE). They are also available [online](http://www.gnu.org/licenses/lgpl.html).
+
+The [TaskPaper] trademark, OS X app and document format are the property of [Hog Bay Software], protected by copyright.  The author of `taskpaper_utils` is not affiliated with [Hog Bay Software].
+
 ---
 
+[Hog Bay Software]: http://www.hogbaysoftware.com/
 [TaskPaper]: http://www.hogbaysoftware.com/products/taskpaper
 
