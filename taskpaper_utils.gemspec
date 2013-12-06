@@ -1,11 +1,9 @@
 # -*- encoding: utf-8 -*-
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'taskpaper_utils/version'
+version_file = File.expand_path('../lib/taskpaper_utils/version.rb', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name          = "taskpaper_utils"
-  gem.version       = TaskpaperUtils::VERSION
+  gem.version       = File.read(version_file).match(/VERSION ?= ?['"](.+)['"]/)[1]
   gem.authors       = ["lasitha ranatunga"]
   gem.email         = ["exbinary@gmail.com"]
   gem.summary       = %q{Parse and work with TaskPaper formatted documents.}
