@@ -9,5 +9,12 @@ module TaskpaperUtils
       end
     end
 
+    describe '#title' do
+      it 'is an alias for #text' do
+        project = Project.new('This text is my title:')
+        expect(project.title).to eql project.text
+      end
+    end
+
   end
 end

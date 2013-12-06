@@ -1,4 +1,6 @@
 # TaskpaperUtils
+[![Code Climate](https://codeclimate.com/github/exbinary/taskpaper_utils.png)](https://codeclimate.com/github/exbinary/taskpaper_utils)
+
 Simple ruby library for parsing and working with [TaskPaper] formatted documents.
 
 The [TaskPaper] format is defined by [Hog Bay Software](http://www.hogbaysoftware.com/) for use in their excellent [TaskPaper] OS X app.  It is designed to be human readable and universally portable as plain text.
@@ -28,12 +30,17 @@ Or build the gem yourself:
 
 ## Usage
 
-The primary entry point is:
+Currently parses into an object graph rooted at an instance of `Document`
 
-    TaskpaperUtils.parse('path/to/file.taskpaper')
+    document = TaskpaperUtils.parse('path/to/file.taskpaper')
+    project = document.projects.first
+    puts project.title
+    project.tasks.each do |task|
+      puts task.text
+      puts task.notes.map(&:text)
+      puts task.subtasks.map(&:text)
+    end
     
-This will return an instance of `Document` which contains `Project`, `Task`, and `Note` instances nested appropriately.
-
 To reserialize the object graph back to file, use:
 
     TaskpaperUtils.save(document, 'path/to/new/file.taskpaper') 
