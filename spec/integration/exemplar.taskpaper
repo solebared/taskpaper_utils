@@ -3,11 +3,28 @@ Here’s how TaskPaper reads a ﬁle
 (taken from the TaskPaper User's Guide as of v. 2.3.2. Copy: http://is.gd/JXUr6D)
 
 * Files are expected to use the UTF-8 encoding and use ‘\n’ to separate lines.
-* A task is a line that begins with a hyphen followed by a space ('- ') which can optionally be preﬁxed (i.e indented) with tabs or spaces. A task can have zero or more tags anywhere on the line (not just trailing at the end).
-* A project is a line that isn't a task and ends with a colon (':'), or a colon (':\n') followed by a newline. Tags can exist after the colon, but if any non-tag text is present, then it won’t be recognized as a project.
+
+* A task is a line that begins with a hyphen followed by a space ('- ') which
+can optionally be preﬁxed (i.e indented) with tabs or spaces. A task can have
+zero or more tags anywhere on the line (not just trailing at the end).
+
+* A project is a line that isn't a task and ends with a colon (':'), or a colon
+(':\n') followed by a newline. Tags can exist after the colon, but if any
+non-tag text is present, then it won’t be recognized as a project.
+
 * A note is any line that doesn't match the task or project rules.
-* Indentation level (with tabs, not spaces) deﬁnes ownership. For instance, if you indent one task under another task, then it is considered a subtask. Tasks and notes own all objects that are indented underneath them. Empty lines are ignored when calculating ownership.
-* A tag has the form "@tag", i.e. it starts with an "at" character ("@"), followed by a run of non-whitespace characters. A tag can optionally have a value assigned to it. The value syntax immediately follows the tag word (no whitespace between) and is enclosed by parentheses: '(' and ')'. The value text inside can have whitespace, but no newlines. Here is an example of a tag with a value: @tag(tag's value).
+
+* Indentation level (with tabs, not spaces) deﬁnes ownership. For instance, if
+you indent one task under another task, then it is considered a subtask. Tasks
+and notes own all objects that are indented underneath them. Empty lines are
+ignored when calculating ownership.
+
+* A tag has the form "@tag", i.e. it starts with an "at" character ("@"),
+followed by a run of non-whitespace characters. A tag can optionally have a
+value assigned to it. The value syntax immediately follows the tag word (no
+whitespace between) and is enclosed by parentheses: '(' and ')'. The value text
+inside can have whitespace, but no newlines. Here is an example of a tag with a
+value: @tag(tag's value).
 
 The rest of this file exemplifies the spec
 ------------------------------------------
