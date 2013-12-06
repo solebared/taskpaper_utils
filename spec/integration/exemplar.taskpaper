@@ -1,6 +1,6 @@
 Here’s how TaskPaper reads a ﬁle
 --------------------------------
-(taken from the TaskPaper User's Guide v. 2.3.1 at http://cl.ly/GYT2)
+(taken from the TaskPaper User's Guide as of v. 2.3.2. Copy: http://is.gd/JXUr6D)
 
 * Files are expected to use the UTF-8 encoding and use ‘\n’ to separate lines.
 * A task is a line that begins with a hyphen followed by a space ('- ') which can optionally be preﬁxed (i.e indented) with tabs or spaces. A task can have zero or more tags anywhere on the line (not just trailing at the end).
