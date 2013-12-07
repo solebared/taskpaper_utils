@@ -15,10 +15,6 @@ Gem::Specification.new do |gem|
     model objects and reserialize.
   }
 
-  gem.add_development_dependency 'rspec',     '~> 2.14'
-  gem.add_development_dependency 'rubocop',   '~> 0.15'
-  gem.add_development_dependency 'simplecov', '~> 0.08'
-
   # todo: depending on git here may not be portable
   gem.files         = `git ls-files`.split($/)
   gem.test_files    = gem.files.grep(%r{^spec/})
