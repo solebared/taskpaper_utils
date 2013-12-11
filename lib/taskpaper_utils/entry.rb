@@ -1,6 +1,7 @@
 module TaskpaperUtils
   class Entry
     (include EntryContainer).for_children_of_type :task, :note
+    include IndentAware
 
     attr_accessor :parent
     attr_reader   :raw_text

@@ -11,6 +11,7 @@ module TaskpaperUtils
     def parse(enum)
       document = Document.new
       enum.reduce(document) do |preceding_entry, line|
+        # todo: this block is not habitable enough
         create_entry(line).tap do |current_entry|
           find_parent_of(current_entry, preceding_entry).add_child(current_entry)
         end
@@ -30,7 +31,7 @@ module TaskpaperUtils
 
     def find_parent_of(current_entry, preceding_entry)
       return preceding_entry if preceding_entry.type? :document
-      case compare_indents(preceding_entry, current_entry)
+      case preceding_entry.indentation <=> current_entry.indentation
       when -1
         preceding_entry
       when  0
@@ -41,7 +42,8 @@ module TaskpaperUtils
     end
 
     def select_parent_of_equally_indented_entry(current_entry, preceding_entry)
-      if unindented(preceding_entry)
+      if preceding_entry.unindented
+        # todo: use #type? instead
         return preceding_entry.document if current_entry.is_a?(Project)
         return preceding_entry if preceding_entry.is_a?(Project)
       end
