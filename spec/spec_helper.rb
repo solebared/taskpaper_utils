@@ -7,7 +7,7 @@
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
-  config.filter_run :focus
+  # config.filter_run :focus
 
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing
@@ -16,8 +16,21 @@ RSpec.configure do |config|
   config.order = 'random'
 end
 
-# todo: do this only if ENV['COVERAGE'] is set
-require 'simplecov'
-SimpleCov.start
+if ENV['COVERAGE'] == 'true'
+  require 'simplecov'
+  require 'coveralls'
+
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+    SimpleCov::Formatter::HTMLFormatter,
+    Coveralls::SimpleCov::Formatter
+  ]
+
+  SimpleCov.start do
+    command_name 'spec:unit'
+    add_filter 'config'
+    add_filter 'spec'
+    minimum_coverage 88   # todo: bump this back up to 100
+  end
+end
 
 require_relative '../lib/taskpaper_utils'

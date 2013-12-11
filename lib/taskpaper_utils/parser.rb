@@ -31,9 +31,12 @@ module TaskpaperUtils
     def find_parent_of(current_entry, preceding_entry)
       return preceding_entry if preceding_entry.type? :document
       case compare_indents(preceding_entry, current_entry)
-      when -1 then preceding_entry
-      when  0 then select_parent_of_equally_indented_entry(current_entry, preceding_entry) # rubocop:disable LineLength
-      when  1 then find_parent_of(current_entry, preceding_entry.parent)
+      when -1
+        preceding_entry
+      when  0
+        select_parent_of_equally_indented_entry(current_entry, preceding_entry)
+      when  1
+        find_parent_of(current_entry, preceding_entry.parent)
       end
     end
 
