@@ -10,7 +10,7 @@ module TaskpaperUtils
     def host(raw_text)
       IndentAwareClass.new(raw_text)
     end
-    
+
     describe '#indentation' do
       it 'calculates indentation based on the number of leading tabs' do
         expect(host('No indents on this line').indentation).to eql 0
