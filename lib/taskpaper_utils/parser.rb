@@ -2,7 +2,7 @@ require 'taskpaper_utils/entry'
 
 module TaskpaperUtils
   class Parser
-    include TextUtils
+    include StringHelpers
 
     def parse_file(path)
       File.open(path) { |file| parse file }
@@ -49,5 +49,6 @@ module TaskpaperUtils
       end
       preceding_entry.parent
     end
+
   end
 end

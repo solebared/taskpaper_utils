@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 module TaskpaperUtils
-  describe TextUtils do
-    include TextUtils
+  describe StringHelpers do
+    include StringHelpers
 
     describe '#strip_leave_indents:' do
       it 'strips line terminators' do
