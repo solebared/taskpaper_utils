@@ -14,9 +14,5 @@ module TaskpaperUtils
       parent.document
     end
 
-    # Internal
-    def to_s
-      raw_text
-    end
   end
 end

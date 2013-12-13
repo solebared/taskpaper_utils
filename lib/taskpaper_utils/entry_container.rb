@@ -46,7 +46,7 @@ module TaskpaperUtils
     end
 
     def type?(of)
-      self.class.name.split('::').last.to_sym.downcase == of
+      type == of
     end
   end
 end

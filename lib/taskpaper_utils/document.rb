@@ -10,6 +10,10 @@ module TaskpaperUtils
       self
     end
 
+    def type
+      :document
+    end
+
     def to_s
       '==Document=='
     end

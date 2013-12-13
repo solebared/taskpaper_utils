@@ -16,5 +16,9 @@ module TaskpaperUtils
     it 'has no parent' do
       expect(document.parent).to be_nil
     end
+
+    it 'is self aware' do
+      expect(document.type).to equal(:document)
+    end
   end
 end
