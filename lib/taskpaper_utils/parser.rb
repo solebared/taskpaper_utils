@@ -44,7 +44,7 @@ module TaskpaperUtils
     end
 
     def determine_parent_when_equally_indented
-      if previous.unindented
+      if current.unindented
         return previous.document if current.type?(:project)
         return previous          if previous.type?(:project)
       end

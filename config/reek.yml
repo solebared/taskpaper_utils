@@ -1,6 +1,6 @@
 ---
 Attribute:
-  enabled: true
+  enabled: false
   exclude: []
 BooleanParameter:
   enabled: true
@@ -23,9 +23,10 @@ DuplicateMethodCall:
   allow_calls: []
 FeatureEnvy:
   enabled: true
-  exclude: []
+  exclude:
+    - StringHelpers#strip_leave_indents
 IrresponsibleModule:
-  enabled: true
+  enabled: false
   exclude: []
 LongParameterList:
   enabled: true
@@ -40,7 +41,9 @@ LongYieldList:
   max_params: 2
 NestedIterators:
   enabled: true
-  exclude: []
+  exclude:
+    - TaskpaperUtils#self.save
+    - EntryContainer::Generators#for_children_of_type
   max_allowed_nesting: 1
   ignore_iterators: []
 NilCheck:
@@ -62,7 +65,7 @@ TooManyStatements:
   enabled: true
   exclude:
   - each
-  max_statements: 2
+  max_statements: 4
 UncommunicativeMethodName:
   enabled: true
   exclude: []
@@ -99,5 +102,6 @@ UnusedParameters:
   exclude: []
 UtilityFunction:
   enabled: true
-  exclude: []
+  exclude:
+    - StringHelpers#strip_leave_indents
   max_helper_calls: 0
