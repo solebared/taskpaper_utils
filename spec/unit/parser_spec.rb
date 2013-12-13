@@ -3,7 +3,7 @@ require 'spec_helper'
 module TaskpaperUtils
   describe Parser do
 
-    let(:parser) { ::TaskpaperUtils::Parser.new }
+    let(:parser) { Parser.new }
 
     describe '#create_entry' do
 
@@ -127,11 +127,11 @@ module TaskpaperUtils
       end
 
       def parent_of(current_entry, preceding_entry)
-        parser.find_parent_of(current_entry, preceding_entry)
+        EntryPair.new(preceding_entry, current_entry).identify_parent
       end
     end
 
-    def entry(raw_text, parent = ::TaskpaperUtils::Document.new)
+    def entry(raw_text, parent = Document.new)
       parser.create_entry(raw_text).tap do |entry|
         parent.add_child(entry)
       end
