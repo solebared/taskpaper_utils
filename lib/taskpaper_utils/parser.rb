@@ -4,10 +4,6 @@ module TaskpaperUtils
   class Parser
     include StringHelpers
 
-    def parse_file(path)
-      File.open(path) { |file| parse file }
-    end
-
     def parse(enum)
       document = Document.new
       enum.reduce(document) do |previous, line|

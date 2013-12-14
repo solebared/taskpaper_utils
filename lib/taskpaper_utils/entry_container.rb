@@ -23,7 +23,7 @@ module TaskpaperUtils
     end
 
     # Entry - We expect to hold Entry objects, however anything that responds
-    #         to #yield_raw_text(&block) and #type?(:document|:project|:task|:note)
+    #         to #dump(&block) and #type?(:document|:project|:task|:note)
     #         will work
     def add_child(entry)
       children << entry
@@ -33,16 +33,16 @@ module TaskpaperUtils
 
     # Yields own raw text to the block and then recurses over children,
     # effectively yielding the whole sub-tree of text rooted at this instance
-    def yield_raw_text(&block)
-      yield raw_text if respond_to? :raw_text
-      children.each { |child| child.yield_raw_text(&block) }
+    def dump(&block)
+      yield raw_text if respond_to?(:raw_text)
+      children.each { |child| child.dump(&block) }
     end
 
     # Internal
     #
     # Symbol - symbolic representation of one of the Entry subclasses
     def children_of_type(entry_type)
-      children.select { |child| child.type? entry_type }
+      children.select { |child| child.type?(entry_type) }
     end
 
     def type?(of)
