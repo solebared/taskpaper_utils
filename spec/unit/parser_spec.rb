@@ -5,6 +5,10 @@ module TaskpaperUtils
 
     let(:parser) { Parser.new }
 
+    it 'parses an Enumerable and returns a Document' do
+      expect(parser.parse(['project:', '- task'])).to be_a(Document)
+    end
+
     describe '#create_entry' do
 
       describe 'recognizes basic entry types' do
