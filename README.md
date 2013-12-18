@@ -1,4 +1,4 @@
-TaskpaperUtils [![Code Climate](https://codeclimate.com/github/exbinary/taskpaper_utils.png)](https://codeclimate.com/github/exbinary/taskpaper_utils) [![LGPLv3](http://upload.wikimedia.org/wikipedia/commons/a/a1/LGPL-V3.png)](http://www.gnu.org/licenses/lgpl.html)
+TaskpaperUtils [![Code Climate](https://codeclimate.com/github/exbinary/taskpaper_utils.png)](https://codeclimate.com/github/exbinary/taskpaper_utils) [![Coverage Status](https://coveralls.io/repos/exbinary/taskpaper_utils/badge.png)](https://coveralls.io/r/exbinary/taskpaper_utils) [![LGPLv3](http://upload.wikimedia.org/wikipedia/commons/a/a1/LGPL-V3.png)](http://www.gnu.org/licenses/lgpl.html)
 ==============
 
 Simple ruby library for parsing and working with [TaskPaper] formatted documents.
