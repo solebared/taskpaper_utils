@@ -3,7 +3,7 @@ todo:
 
 * coveralls
 * travis
-* yardoc
+* get yardstick working; document!; does yard gem need to be under :development?
 * turn reek IrresponsibleModule back on
 * require files as needed instead of all up front
 * feature: add tag parsing

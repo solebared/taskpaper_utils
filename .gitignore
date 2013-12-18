@@ -3,5 +3,6 @@
 Gemfile.lock
 Makefile
 coverage/
-tmp/
+measurements/
 taskpaper_tools-*.gem
+tmp/
