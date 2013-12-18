@@ -21,14 +21,11 @@ module TaskpaperUtils
         it 'recognizes tasks that end with a colon' do
           expect(entry '- task or project?:').to be_a Task
         end
-        # todo: other edge cases?
       end
 
     end
 
     describe 'parent indentification' do
-
-      # todo: what happens to blank lines? -- always a child of previous entry?
 
       describe 'first child (indented relative to preceding line)' do
         let(:first)  { entry('project:') }
@@ -127,7 +124,6 @@ module TaskpaperUtils
           end
         end
 
-        # todo: edge cases?
       end
 
       def parent_of(current_entry, preceding_entry)
