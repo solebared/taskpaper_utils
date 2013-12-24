@@ -41,10 +41,8 @@ LongYieldList:
   max_params: 2
 NestedIterators:
   enabled: true
-  exclude:
-    - TaskpaperUtils#self.save
-    - EntryContainer::Generators#for_children_of_type
-  max_allowed_nesting: 1
+  exclude: []
+  max_allowed_nesting: 2
   ignore_iterators: []
 NilCheck:
   enabled: true

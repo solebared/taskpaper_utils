@@ -127,7 +127,7 @@ module TaskpaperUtils
       end
 
       def parent_of(current_entry, preceding_entry)
-        EntryPair.new(preceding_entry, current_entry).identify_parent
+        ParentHound.new(current_entry, preceding_entry).identify_parent
       end
     end
 
