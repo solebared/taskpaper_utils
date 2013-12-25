@@ -127,7 +127,9 @@ module TaskpaperUtils
       end
 
       def parent_of(current_entry, preceding_entry)
-        ParentHound.new(current_entry, preceding_entry).identify_parent
+        parser.instance_variable_set(:@current, current_entry)
+        parser.instance_variable_set(:@preceding, preceding_entry)
+        parser.identify_parent
       end
     end
 

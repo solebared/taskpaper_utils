@@ -5,11 +5,10 @@ module TaskpaperUtils
     include StringHelpers
 
     def parse(enum)
-      document = Document.new
-      enum.reduce(document) do |previous, line|
-        create_entry(line).tap do |entry|
-          ParentHound.new(entry, previous).identify_parent.add_child(entry)
-        end
+      document = @current = Document.new
+      enum.each do |line|
+        @preceding, @current = @current, create_entry(line)
+        identify_parent.add_child(@current)
       end
       document
     end
@@ -23,9 +22,6 @@ module TaskpaperUtils
         end
       ).new raw_text
     end
-  end # class Parser
-
-  ParentHound = Struct.new(:entry, :preceding) do
 
     def identify_parent
       parent_if_preceding_is_document ||
@@ -35,34 +31,35 @@ module TaskpaperUtils
     end
 
     def parent_if_preceding_is_document
-      preceding if preceding.type? :document
+      @preceding if @preceding.type? :document
     end
 
     def parent_if_preceding_less_indented
-      preceding if preceding.indentation < entry.indentation
+      @preceding if @preceding.indentation < @current.indentation
     end
 
     def parent_if_preceding_equally_indented
-      if preceding.indentation == entry.indentation
+      if @preceding.indentation == @current.indentation
         parent_if_unindented_project ||
         parent_if_unindented_child_of_a_project ||
-        preceding.parent
+        @preceding.parent
       end
     end
 
     def parent_if_preceding_more_indented
-      if preceding.indentation > entry.indentation
-        ParentHound.new(entry, preceding.parent).identify_parent
+      if @preceding.indentation > @current.indentation
+        @preceding = @preceding.parent
+        identify_parent   # recurse
       end
     end
 
     def parent_if_unindented_project
-      preceding.document if entry.unindented && entry.type?(:project)
+      @preceding.document if @current.unindented && @current.type?(:project)
     end
 
     def parent_if_unindented_child_of_a_project
-      preceding if entry.unindented && preceding.type?(:project)
+      @preceding if @current.unindented && @preceding.type?(:project)
     end
 
-  end # class ParentHound
+  end
 end
