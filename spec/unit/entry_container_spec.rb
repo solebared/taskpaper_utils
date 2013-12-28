@@ -49,5 +49,29 @@ module TaskpaperUtils
       end
 
     end
+
+    describe '#[]' do
+
+      let(:note) { Note.new('a note')   }
+      let(:task) { Task.new('- a task') }
+      let(:project)  do
+        Project.new('p:').tap do |p|
+          p.add_child(note)
+          p.add_child(task)
+        end
+      end
+
+      it 'finds a child referenced by text' do
+        expect(project['a note']).to eql(note)
+      end
+
+      it 'uses the text stripped of signifiers (such as the dash before a task)' do
+        expect(project['a task']).to eql(task)
+      end
+
+      it 'matches the whole text, not just a part of it' do
+        expect(project['a']).to be_nil
+      end
+    end
   end
 end

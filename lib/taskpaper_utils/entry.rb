@@ -14,5 +14,9 @@ module TaskpaperUtils
       parent.document
     end
 
+    # helpful for troubleshooting, but not otherwise needed
+    # def inspect
+      # "#<#{self.class.name}:#{@raw_text}>"
+    # end
   end
 end

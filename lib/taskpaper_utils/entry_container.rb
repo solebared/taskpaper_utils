@@ -38,6 +38,10 @@ module TaskpaperUtils
       children.each { |child| child.dump(&block) }
     end
 
+    def [](text)
+      children.detect { |child| child.text == text }
+    end
+
     # Internal
     #
     # Symbol - symbolic representation of one of the Entry subclasses
