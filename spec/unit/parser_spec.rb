@@ -5,21 +5,23 @@ module TaskpaperUtils
 
     let(:parser) { Parser.new }
 
-    it 'parses an Enumerable and returns a Document' do
-      expect(parser.parse(['project:', '- task'])).to be_a(Document)
-    end
-
     describe '#create_entry' do
 
       describe 'recognizes basic entry types' do
-        it('recognizes a project') { expect(entry('a project:')).to be_a Project }
-        it('recognizes a task   ') { expect(entry('- a task  ')).to be_a Task    }
-        it('recognizes a note   ') { expect(entry('a note    ')).to be_a Note    }
+        specify('a project') { expect('a project:').to be_identified_as_a(:project) }
+        specify('a task   ') { expect('- a task  ').to be_identified_as_a(:task) }
+        specify('a note   ') { expect('a note    ').to be_identified_as_a(:note) }
       end
 
       describe 'edge cases:' do
         it 'recognizes tasks that end with a colon' do
-          expect(entry '- task or project?:').to be_a Task
+          expect('- task or project?:').to be_identified_as_a(:task)
+        end
+      end
+
+      RSpec::Matchers.define :be_identified_as_a do |type|
+        match do |raw_text|
+          parser.create_entry(raw_text).type == type
         end
       end
 
@@ -27,35 +29,31 @@ module TaskpaperUtils
 
     describe 'parent indentification' do
 
-      describe 'first child (indented relative to preceding line)' do
-        let(:first)  { entry('project:') }
-        let(:second) { entry("\t- task x", first) }
+      describe 'simple indentation:' do
 
-        it 'identifies the previous entry as the parent' do
-          expect(parent_of(second, first)).to eql first
+        let(:project) { doc['project'] }
+        let(:doc) do
+          parse "project:
+                 \t- task x
+                 \t- task y"
         end
 
-        it 'adds the current entry as a child of the preceding entry' do
-          expect(first.children).to include(second)
-        end
-      end
-
-      describe 'sibling child (same indent as preceding line)' do
-        let(:first)  { entry('project:') }
-        let(:second) { entry("\t- task x", first) }
-        let(:third)  { entry("\t- task y", first) }
-
-        it "identifies the preceding entry's parent as the current entry's own parent" do
-          expect(parent_of(third, second)).to eql first
+        describe 'entry indented relative to preceding entry' do
+          it 'identifies the previous entry as the parent' do
+            expect(project).to be_parent_of('task x')
+          end
         end
 
-        it "adds the current entry as a child of the preceding entry's parent" do
-          expect(first.children).to include(third)
-        end
+        describe 'sibling entry (same indent as preceding line)' do
 
-        it "appends current entry to the end of parent's collection of children" do
-          fourth = entry("\t- task z", first)
-          expect(first.children.last).to be fourth
+          it "identifies the preceding entry's parent as its own parent" do
+            expect(project).to be_parent_of('task y')
+          end
+
+          it "appends to the end of parent's collection of children" do
+            expect(project.children.last.text).to eql('task y')
+          end
+
         end
       end
 
@@ -64,80 +62,78 @@ module TaskpaperUtils
         describe 'not within a project' do
 
           specify 'are children of the Document' do
-            document = Document.new
-            first  = entry('line one', document)
-            second = entry('line two', document)
-            expect(parent_of(first, document)).to eql document
-            expect(parent_of(second, first)).to eql document
-            expect(document.children.size).to eql 2
+            doc = parse("one\ntwo")
+            expect(doc).to be_parent_of('one')
+            expect(doc).to be_parent_of('two')
+            expect(doc).to have(2).children
           end
 
           specify 'including projects on consecutive lines' do
-            document = Document.new
-            first  = entry('project a:', document)
-            second = entry('project b:', document)
-            expect(parent_of(first, document)).to eql document
-            expect(parent_of(second, first)).to eql document
+            doc = parse("project a:\nproject b:")
+            expect(doc).to be_parent_of('project a')
+            expect(doc).to be_parent_of('project b')
           end
 
           specify 'even when a project is preceded by an unindented task' do
-            document = Document.new
-            project_a = entry('project a:', document)
-            task_of_a = entry('- unindented', project_a)
-            project_b = entry('project b:', document)
-            expect(parent_of(project_b, task_of_a)).to eql document
+            doc = parse "project a:
+                         - unindented
+                         project b:"
+            expect(doc).to be_parent_of('project b')
           end
         end
 
         describe 'under a project' do
           specify 'belong to the project even without indents' do
-            project_entry  = entry('project a:')
-            task_entry     = entry('- task a', project_entry)
-            expect(parent_of(task_entry, project_entry)).to eql project_entry
+            doc = parse "project:\n- task"
+            expect(doc['project']).to be_parent_of('task')
           end
         end
       end
 
       describe 'multiple indents and outdents:' do
-        let(:document)     { Document.new }
-        let(:project_a)    { entry 'project a:',              document  }
-        let(:task_x)       { entry "\t- task x",              project_a }
-        let(:subtask_of_x) { entry "\t\t- subtask of task x", task_x    }
-        let(:task_y)       { entry "\t- task y",              project_a }
-        let(:subtask_of_y) { entry "\t\t- subtask of task y", task_y    }
-        let(:project_b)    { entry 'project b:',              document  }
+        let(:doc) do
+          parse "project a:
+                 \t- task x
+                 \t\t- subtask of x
+                 \t- task y
+                 \t\t- subtask of y
+                 project b:"
+        end
 
         specify 'subtasks are children of tasks' do
-          expect(parent_of(subtask_of_x, task_x)).to eql task_x
-          expect(parent_of(subtask_of_y, task_y)).to eql task_y
+          expect(doc['project a']['task x']).to be_parent_of('subtask of x')
+          expect(doc['project a']['task y']).to be_parent_of('subtask of y')
         end
 
         describe 'outdenting by one level' do
           it "means the entry is a sibling of the preceding entry's parent" do
-            expect(parent_of(task_y, subtask_of_x)).to eql project_a
+            expect(doc['project a']).to be_parent_of('task y')
           end
         end
 
         describe 'outdenting by more than one level' do
           it 'should identify the correct parent' do
-            expect(parent_of(project_b, subtask_of_y)).to eql document
+            expect(doc).to be_parent_of('project b')
           end
         end
 
       end
 
-      def parent_of(current_entry, preceding_entry)
-        parser.instance_variable_set(:@current, current_entry)
-        parser.instance_variable_set(:@preceding, preceding_entry)
-        parser.identify_parent
+      RSpec::Matchers.define :be_parent_of do |child_text|
+        match do |parent|
+          child = parent[child_text]
+          !child.nil? && child.parent == parent
+        end
       end
-    end
 
-    def entry(raw_text, parent = Document.new)
-      parser.create_entry(raw_text).tap do |entry|
-        parent.add_child(entry)
+      def parse(document_text)
+        parser.parse(lines(document_text))
       end
-    end
 
+      def lines(string)
+        string.gsub(/^ */, '').each_line
+      end
+
+    end
   end
 end

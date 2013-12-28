@@ -5,12 +5,15 @@ module TaskpaperUtils
     include StringHelpers
 
     def parse(enum)
-      document = @current = Document.new
-      enum.each do |line|
-        @preceding, @current = @current, create_entry(line)
-        identify_parent.add_child(@current)
-      end
+      document = Document.new
+      enum.each { |line| parse_line(line, document) }
       document
+    end
+
+    def parse_line(line, document)
+      @preceding = @current || document
+      @current = create_entry(line)
+      identify_parent.add_child(@current)
     end
 
     def create_entry(line)
