@@ -30,19 +30,24 @@ Or build the gem yourself:
 
 ## Usage
 
-Currently parses into an object graph rooted at an instance of `Document`
+    require 'taskpaper_tools'
 
+    # parse taskpaper document into object graph
     document = TaskpaperUtils.parse('path/to/file.taskpaper')
-    project = document.projects.first
-    puts project.title
-    project.tasks.each do |task|
-      puts task.text
-      puts task.notes.map(&:text)
-      puts task.subtasks.map(&:text)
-    end
-    
-To reserialize the object graph back to file, use:
 
+    # Document contains projects, tasks and notes 
+    project = document.projects.first
+
+    # allows referencing child entries using their text
+    task = project['add search feature']
+    puts task.text        # => "add search feature"
+    puts task.raw_text    # => "\t- add search feature"
+
+    # access other child entries
+    puts task.notes.map(&:text)
+    puts task.subtasks.map(&:text)
+    
+    # reserialize the object graph back to file
     TaskpaperUtils.save(document, 'path/to/new/file.taskpaper') 
 
 _More usage examples to come..._
