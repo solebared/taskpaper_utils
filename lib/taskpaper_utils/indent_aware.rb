@@ -1,6 +1,8 @@
 module TaskpaperUtils
 
   # Expects host object to provide a #raw_text method
+  #
+  # @api private
   module IndentAware
 
     def indentation

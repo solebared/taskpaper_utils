@@ -1,4 +1,6 @@
 module TaskpaperUtils
+
+  # Represents a single line of free-form notes
   class Note < Entry
 
     def text

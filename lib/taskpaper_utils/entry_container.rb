@@ -1,7 +1,15 @@
 module TaskpaperUtils
-  # Internal: Groups methods included into Entry and Document
+
+  # Container for Entry objects (anything that responds to #type,
+  # #dump and #text (see {#add_child})
+  #
+  # Groups methods included into Entry and Document and provides most
+  # of the public API for working with taskpaper objects.
   module EntryContainer
+
     # Class methods mixed into host when EntryContainer is included
+    #
+    # @api private
     module Generators
       def for_children_of_type(*types)
         types.each do |type|
@@ -10,45 +18,56 @@ module TaskpaperUtils
       end
     end
 
+    # @api private
     def self.included(klass)
       klass.extend EntryContainer::Generators
     end
 
-    # Lazy initializes an array.  Provided only for convenience; the @children
-    # ivar is not referenced, only the method
-    #
-    # Returns an object that responds to #<< and #each.
+    # @return [Array] All contained entries
     def children
       @children ||= []
     end
 
-    # Entry - We expect to hold Entry objects, however anything that responds
-    #         to #dump(&block) and #type?(:document|:project|:task|:note)
-    #         will work
+    # Adds an entry to the container
+    #
+    # @param [#text, #type, #dump]
+    # @return the added entry
     def add_child(entry)
       children << entry
       entry.parent = self
       entry
     end
 
-    # Yields own raw text to the block and then recurses over children,
-    # effectively yielding the whole sub-tree of text rooted at this instance
+    # @yield Provides the raw text of the entry as well as the text of
+    #   any of its children correctly indented.  Used to get the whole
+    #   tree of raw_text rooted at this point.
     def dump(&block)
       yield raw_text if respond_to?(:raw_text)
       children.each { |child| child.dump(&block) }
     end
 
+    # Locate a child entry by its text.
+    #
+    # @example
+    #   # a project:
+    #   #   - a task
+    #   #   - another
+    #   document['a project'][another]   # returns the second Task
+    #
+    # @param [String] the text of the entry to be found without any
+    #   type identifiers such as `- ` for tasks and `:` for projects
     def [](text)
       children.detect { |child| child.text == text }
     end
 
-    # Internal
-    #
-    # Symbol - symbolic representation of one of the Entry subclasses
+    # @param (see #type?)
+    # @return [Array] Children of the specified type
     def children_of_type(entry_type)
       children.select { |child| child.type?(entry_type) }
     end
 
+    # @param [:project, :task, :note]
+    # @return Whether this Entry is of the specified type
     def type?(of)
       type == of
     end

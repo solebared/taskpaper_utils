@@ -1,4 +1,8 @@
 module TaskpaperUtils
+  # @abstract class representing a single line entry,
+  #   implemented in {Project}, {Task} and {Note}
+  #
+  # @api private
   class Entry
     (include EntryContainer).for_children_of_type :task, :note
     include IndentAware

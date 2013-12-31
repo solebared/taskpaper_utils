@@ -1,6 +1,11 @@
 require 'taskpaper_utils/entry'
 
 module TaskpaperUtils
+
+  # Parses a taskpaper formated document (accepted as an Enumerable)
+  # Produces an object graph rooted at {Document}
+  #
+  # @api private
   class Parser
     include StringHelpers
 

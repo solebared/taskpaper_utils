@@ -1,4 +1,6 @@
 module TaskpaperUtils
+
+  # Represents a project
   class Project < Entry
 
     def text
