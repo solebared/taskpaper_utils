@@ -19,6 +19,10 @@ module TaskpaperUtils
       ).new(raw_text)
     end
 
+    def self.parse_tags(line)
+      line.scan(/@(\w+)(?:\((.+?)\))?/)
+    end
+
     def parse(enum)
       @current = document = Document.new
       enum.each { |line| parse_line(line) }
