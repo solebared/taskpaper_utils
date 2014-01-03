@@ -3,9 +3,7 @@ require 'spec_helper'
 module TaskpaperUtils
   describe Parser do
 
-    let(:parser) { Parser.new }
-
-    describe '#create_entry' do
+    describe 'create_entry' do
 
       describe 'recognizes basic entry types' do
         specify('a project') { expect('a project:').to be_identified_as_a(:project) }
@@ -21,13 +19,15 @@ module TaskpaperUtils
 
       RSpec::Matchers.define :be_identified_as_a do |type|
         match do |raw_text|
-          parser.create_entry(raw_text).type == type
+          Parser.create_entry(raw_text).type == type
         end
       end
 
     end
 
     describe 'parent indentification' do
+
+      let(:parser) { Parser.new }
 
       describe 'simple indentation:' do
 
@@ -135,5 +135,22 @@ module TaskpaperUtils
       end
 
     end
+
+    describe '#strip_leave_indents:' do
+
+      it 'strips line terminators' do
+        expect(Parser.strip_leave_indents "a line\n").to eql 'a line'
+      end
+
+      it 'strips leading and trailing spaces' do
+        expect(Parser.strip_leave_indents '  spacious  ').to eql 'spacious'
+      end
+
+      it 'preservs leading tabs' do
+        expect(Parser.strip_leave_indents "\tstill indented!").to eql "\tstill indented!"
+      end
+
+    end
+
   end
 end

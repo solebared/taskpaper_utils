@@ -23,8 +23,7 @@ DuplicateMethodCall:
   allow_calls: []
 FeatureEnvy:
   enabled: true
-  exclude:
-    - StringHelpers#strip_leave_indents
+  exclude: []
 IrresponsibleModule:
   enabled: true
   exclude: []
@@ -100,6 +99,5 @@ UnusedParameters:
   exclude: []
 UtilityFunction:
   enabled: true
-  exclude:
-    - StringHelpers#strip_leave_indents
+  exclude: []
   max_helper_calls: 0

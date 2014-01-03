@@ -1,5 +1,3 @@
-require 'taskpaper_utils/entry'
-
 module TaskpaperUtils
 
   # Parses a taskpaper formated document (accepted as an Enumerable)
@@ -7,7 +5,19 @@ module TaskpaperUtils
   #
   # @api private
   class Parser
-    include StringHelpers
+
+    def self.strip_leave_indents(str)
+      str.rstrip.sub(/\A */, '')
+    end
+
+    def self.create_entry(raw_text)
+      ( case
+        when raw_text =~ /\A(\s*)?-/  then Task
+        when raw_text.end_with?(':')  then Project
+        else                               Note
+        end
+      ).new(raw_text)
+    end
 
     def parse(enum)
       @current = document = Document.new
@@ -17,18 +27,9 @@ module TaskpaperUtils
 
     def parse_line(line)
       @preceding = @current
-      @current = create_entry(line)
+      stripped = Parser.strip_leave_indents(line)
+      @current = Parser.create_entry(stripped)
       identify_parent.add_child(@current)
-    end
-
-    def create_entry(line)
-      raw_text = strip_leave_indents(line)
-      ( case
-        when raw_text =~ /\A(\s*)?-/  then Task
-        when raw_text.end_with?(':')  then Project
-        else                               Note
-        end
-      ).new raw_text
     end
 
     def identify_parent

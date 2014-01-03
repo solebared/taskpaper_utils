@@ -1,5 +1,13 @@
-%w(version helpers indent_aware entry_container
-   document entry project task note parser).each do |lib|
+%w(version
+   indent_aware
+   entry_container
+   document
+   entry
+   project
+   task
+   note
+   parser
+).each do |lib|
   require "taskpaper_utils/#{lib}"
 end
 
