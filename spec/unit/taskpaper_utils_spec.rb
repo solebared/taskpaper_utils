@@ -13,12 +13,9 @@ module TaskpaperUtils
 
     describe '#parse' do
 
-      let(:parser) { double(Parser) }
-
       it 'delegates to a new parser with an open file at the given path' do
         File.should_receive(:open).with('/path').and_yield(file)
-        Parser.should_receive(:new).and_return(parser)
-        parser.should_receive(:parse).with(file)
+        Parser.should_receive(:parse).with(file)
         TaskpaperUtils.parse('/path')
       end
 

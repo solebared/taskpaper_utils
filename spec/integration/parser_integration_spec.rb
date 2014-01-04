@@ -3,11 +3,9 @@ require 'spec_helper'
 module TaskpaperUtils
   describe Parser, 'integration:' do
 
-    let(:parser) { Parser.new }
-
     describe 'a simple document' do
       let(:document) do
-        parser.parse(lines(
+        Parser.parse(lines(
           "Project A:
            - task one
            \t- subtask
@@ -43,7 +41,7 @@ module TaskpaperUtils
 
     describe 'a document with notes and tasks outside of projects' do
       let(:document) do
-        parser.parse(lines(
+        Parser.parse(lines(
           "a note
            - a task
            another note

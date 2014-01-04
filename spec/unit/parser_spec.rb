@@ -27,8 +27,6 @@ module TaskpaperUtils
 
     describe 'parent indentification' do
 
-      let(:parser) { Parser.new }
-
       describe 'simple indentation:' do
 
         let(:project) { doc['project'] }
@@ -127,7 +125,7 @@ module TaskpaperUtils
       end
 
       def parse(document_text)
-        parser.parse(lines(document_text))
+        Parser.parse(lines(document_text))
       end
 
       def lines(string)
