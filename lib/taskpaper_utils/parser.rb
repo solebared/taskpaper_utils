@@ -4,7 +4,7 @@ module TaskpaperUtils
   # Produces an object graph rooted at {Document}
   #
   # @api private
-  class Parser
+  module Parser
 
     def self.strip_leave_indents(str)
       str.rstrip.sub(/\A */, '')
@@ -26,28 +26,38 @@ module TaskpaperUtils
     def self.parse(enum)
       document = Document.new
       enum.reduce(document) do |previous, line|
-        parse_entry(line, previous)
+        EntryParser.parse_entry(strip_leave_indents(line), previous)
       end
       document
     end
 
-    def self.parse_entry(line, previous)
-      entry = create_entry(strip_leave_indents(line))
-      raw_entry = ParentHound.new(previous, entry)
-      raw_entry.identify_parent.add_child(entry)
-      entry
-    end
+    private
 
-    # Walks back up the previously parsed entries to determine the right parent.
-    #
-    # @api private
-    class ParentHound
+    # Responsible for parsing a single entry (line), and identifying its parent
+    class EntryParser
+
+      def self.parse_entry(raw_text, previous)
+        new(raw_text)
+          .create_entry
+          .connect_to_parent(previous)
+          .entry
+      end
 
       attr_reader :entry
 
-      def initialize(previous_entry, entry)
+      def initialize(line)
+        @raw_text = line
+      end
+
+      def create_entry
+        @entry = Parser.create_entry(@raw_text)
+        self
+      end
+
+      def connect_to_parent(previous_entry)
         @preceding = previous_entry
-        @entry = entry
+        identify_parent.add_child(@entry)
+        self
       end
 
       def identify_parent

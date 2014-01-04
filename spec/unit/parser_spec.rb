@@ -137,15 +137,21 @@ module TaskpaperUtils
     describe '#strip_leave_indents:' do
 
       it 'strips line terminators' do
-        expect(Parser.strip_leave_indents "a line\n").to eql 'a line'
+        expect("a line\n").to be_stripped_into('a line')
       end
 
       it 'strips leading and trailing spaces' do
-        expect(Parser.strip_leave_indents '  spacious  ').to eql 'spacious'
+        expect('  spacious  ').to be_stripped_into('spacious')
       end
 
-      it 'preservs leading tabs' do
-        expect(Parser.strip_leave_indents "\tstill indented!").to eql "\tstill indented!"
+      it 'preserves leading tabs' do
+        expect("\tstill indented!").to be_stripped_into("\tstill indented!")
+      end
+
+      RSpec::Matchers.define :be_stripped_into do |expected|
+        match do |str|
+          Parser.strip_leave_indents(str) == expected
+        end
       end
 
     end
