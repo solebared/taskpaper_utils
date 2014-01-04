@@ -38,7 +38,7 @@ Or build the gem yourself:
     # Document contains projects, tasks and notes 
     project = document.projects.first
 
-    # allows referencing child entries using their text
+    # reference child entries using their text
     task = project['add search feature']
     puts task.text        # => "add search feature"
     puts task.raw_text    # => "\t- add search feature"

@@ -1,8 +1,10 @@
 .bundle/
 .virb/
-Gemfile.lock
-Makefile
 coverage/
 measurements/
-taskpaper_tools-*.gem
 tmp/
+
+Gemfile.lock
+Makefile
+scratch.md
+taskpaper_tools-*.gem
