@@ -52,25 +52,34 @@ module TaskpaperUtils
 
     describe '#[]' do
 
-      let(:note) { Note.new('a note')   }
-      let(:task) { Task.new('- a task') }
-      let(:project)  do
-        Project.new('p:').tap do |p|
-          p.add_child(note)
-          p.add_child(task)
-        end
-      end
+      let(:project) { Project.new('p:') }
+      let!(:note)   { project.add_child(Note.new('a note')) }
+      let!(:task)   { project.add_child(Task.new('- a task')) }
 
       it 'finds a child referenced by text' do
-        expect(project['a note']).to eql(note)
+        expect(project['a note']).to eq(note)
       end
 
       it 'uses the text stripped of signifiers (such as the dash before a task)' do
-        expect(project['a task']).to eql(task)
+        expect(project['a task']).to eq(task)
       end
 
       it 'matches the whole text, not just a part of it' do
         expect(project['a']).to be_nil
+      end
+
+      describe 'text with @tags' do
+
+        let!(:tagged) { project.add_child(Task.new('- with @a(tag)')) }
+
+        it 'allows referencing with the whole text including tags' do
+          expect(project['with @a(tag)']).to eq(tagged)
+        end
+
+        it 'allows referencing without trailing tag' do
+          pending
+          expect(project['with']).to eq(tagged)
+        end
       end
     end
   end
