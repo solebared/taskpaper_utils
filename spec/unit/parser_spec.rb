@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Parser do
-    include EntryHelpers
+    include ParsingHelpers
 
     describe '::create_entry' do
 
@@ -18,7 +18,7 @@ module TaskpaperUtils
 
       describe 'project with trailing tags' do
         it 'strips trailing tags before identifying type' do
-          entry = new_entry("project: @with @trailing(tags)")
+          entry = new_entry('project: @with @trailing(tags)')
           expect(entry.type).to equal(:project)
         end
       end
@@ -57,14 +57,15 @@ module TaskpaperUtils
     end
 
     describe 'parent indentification' do
+      include ParsingHelpers
 
       describe 'simple indentation:' do
 
         let(:project) { doc['project'] }
         let(:doc) do
-          parse "project:
-                 \t- task x
-                 \t- task y"
+          parse_doc("project:
+                     \t- task x
+                     \t- task y")
         end
 
         describe 'entry indented relative to preceding entry' do
@@ -91,29 +92,29 @@ module TaskpaperUtils
         describe 'not within a project' do
 
           specify 'are children of the Document' do
-            doc = parse("one\ntwo")
+            doc = parse_doc("one\ntwo")
             expect(doc).to be_parent_of('one')
             expect(doc).to be_parent_of('two')
             expect(doc).to have(2).children
           end
 
           specify 'including projects on consecutive lines' do
-            doc = parse("project a:\nproject b:")
+            doc = parse_doc("project a:\nproject b:")
             expect(doc).to be_parent_of('project a')
             expect(doc).to be_parent_of('project b')
           end
 
           specify 'even when a project is preceded by an unindented task' do
-            doc = parse "project a:
-                         - unindented
-                         project b:"
+            doc = parse_doc("project a:
+                             - unindented
+                             project b:")
             expect(doc).to be_parent_of('project b')
           end
         end
 
         describe 'under a project' do
           specify 'belong to the project even without indents' do
-            doc = parse "project:\n- task"
+            doc = parse_doc("project:\n- task")
             expect(doc['project']).to be_parent_of('task')
           end
         end
@@ -121,12 +122,12 @@ module TaskpaperUtils
 
       describe 'multiple indents and outdents:' do
         let(:doc) do
-          parse "project a:
-                 \t- task x
-                 \t\t- subtask of x
-                 \t- task y
-                 \t\t- subtask of y
-                 project b:"
+          parse_doc("project a:
+                     \t- task x
+                     \t\t- subtask of x
+                     \t- task y
+                     \t\t- subtask of y
+                     project b:")
         end
 
         specify 'subtasks are children of tasks' do
@@ -153,14 +154,6 @@ module TaskpaperUtils
           child = parent[child_text]
           !child.nil? && child.parent == parent
         end
-      end
-
-      def parse(document_text)
-        Parser.parse(lines(document_text))
-      end
-
-      def lines(string)
-        string.gsub(/^ */, '').each_line
       end
 
     end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe EntryContainer do
-    include EntryHelpers
+    include ParsingHelpers
 
     describe '#dump' do
 

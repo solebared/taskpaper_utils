@@ -20,7 +20,7 @@ module TaskpaperUtils
   # @param [String] at file path
   # @return [Document]
   def self.parse(path)
-    File.open(path) { |file| Parser.parse(file) }
+    File.open(path) { |file| Parser.new.parse(file) }
   end
 
   # Serialize a {Document} to a file in taskpaper format

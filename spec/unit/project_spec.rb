@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Project do
-    include EntryHelpers
+    include ParsingHelpers
 
     let(:project) { new_entry('Project:') }
 

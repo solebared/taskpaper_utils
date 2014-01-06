@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Note do
-    include EntryHelpers
+    include ParsingHelpers
 
     let(:note) { new_entry('any text') }
 

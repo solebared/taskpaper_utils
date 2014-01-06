@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Task do
-    include EntryHelpers
+    include ParsingHelpers
 
     let(:task)    { new_entry('- task') }
     let(:subtask) { new_entry("\t- subtask") }

@@ -2,20 +2,21 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Parser, 'integration:' do
+    include ParsingHelpers
 
     describe 'a simple document' do
+
+      let(:project_a) { document['Project A'] }
       let(:document) do
-        Parser.parse(lines(
+        parse_doc(
           "Project A:
            - task one
            \t- subtask
            - task two
            a note
            \t- subtask of a note
-           Project B:"
-        ))
+           Project B:")
       end
-      let(:project_a) { document['Project A'] }
 
       it 'contains projects' do
         expect(document).to have(2).projects
@@ -40,14 +41,14 @@ module TaskpaperUtils
     end
 
     describe 'a document with notes and tasks outside of projects' do
+
       let(:document) do
-        Parser.parse(lines(
+        parse_doc(
           "a note
            - a task
            another note
            a project:
-           - with a task"
-        ))
+           - with a task")
       end
 
       it 'adopts the unowned entries' do
@@ -57,10 +58,6 @@ module TaskpaperUtils
         expect(document).to have(1).projects
       end
 
-    end
-
-    def lines(string)
-      string.gsub(/^ +/, '').lines
     end
   end
 end

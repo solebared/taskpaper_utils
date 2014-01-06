@@ -4,7 +4,7 @@ module TaskpaperUtils
   # Produces an object graph rooted at {Document}
   #
   # @api private
-  module Parser
+  class Parser
 
     TAG_ATOM = /@(\w+)(?:\((.+?)\))?/
 
@@ -13,8 +13,8 @@ module TaskpaperUtils
     end
 
     def self.create_entry(raw_text)
-      text, trailing_tags = Parser.split_text_and_trailing_tags(raw_text.strip)
-      type_class = Parser.identify_type(text)
+      text, trailing_tags = split_text_and_trailing_tags(raw_text.strip)
+      type_class = identify_type(text)
       text = type_class::Identifier.strip(text)
       type_class.new(raw_text, text, trailing_tags)
     end
@@ -27,50 +27,28 @@ module TaskpaperUtils
       line.scan(TAG_ATOM)
     end
 
-    def self.parse(enum)
-      document = Document.new
-      enum.reduce(document) do |previous, line|
-        EntryParser.parse_entry(strip_leave_indents(line), previous)
-      end
-      document
-    end
-
     def self.split_text_and_trailing_tags(str)
-      if match = /( #{TAG_ATOM})+\Z/.match(str)
-        [match.pre_match, match[0]]
+      if matched = /( #{TAG_ATOM})+\Z/.match(str) # rubocop:disable AssignmentInCondition
+        [matched.pre_match, matched[0]]
       else
         [str, '']
       end
     end
 
+    def parse(enum)
+      @current = document = Document.new
+      enum.each { |line| parse_line(line) }
+      document
+    end
+
+    def parse_line(line)
+      @preceding = @current
+      @current = Parser.create_entry(line)
+      identify_parent.add_child(@current)
+      @current
+    end
+
     private
-
-    # Responsible for parsing a single entry (line), and identifying its parent
-    class EntryParser
-
-      def self.parse_entry(raw_text, previous)
-        new(raw_text)
-          .create_entry
-          .connect_to_parent(previous)
-          .entry
-      end
-
-      attr_reader :entry
-
-      def initialize(line)
-        @raw_text = line
-      end
-
-      def create_entry
-        @entry = Parser.create_entry(@raw_text)
-        self
-      end
-
-      def connect_to_parent(previous_entry)
-        @preceding = previous_entry
-        identify_parent.add_child(@entry)
-        self
-      end
 
       def identify_parent
         parent_if_preceding_is_document ||
@@ -84,11 +62,11 @@ module TaskpaperUtils
       end
 
       def parent_if_preceding_less_indented
-        @preceding if @preceding.indentation < @entry.indentation
+        @preceding if @preceding.indentation < @current.indentation
       end
 
       def parent_if_preceding_equally_indented
-        if @preceding.indentation == @entry.indentation
+        if @preceding.indentation == @current.indentation
           parent_if_unindented_project ||
           parent_if_unindented_child_of_a_project ||
           @preceding.parent
@@ -96,19 +74,19 @@ module TaskpaperUtils
       end
 
       def parent_if_preceding_more_indented
-        if @preceding.indentation > @entry.indentation
+        if @preceding.indentation > @current.indentation
           @preceding = @preceding.parent
           identify_parent   # recurse
         end
       end
 
       def parent_if_unindented_project
-        @preceding.document if @entry.unindented && @entry.type?(:project)
+        @preceding.document if @current.unindented && @current.type?(:project)
       end
 
       def parent_if_unindented_child_of_a_project
-        @preceding if @entry.unindented && @preceding.type?(:project)
+        @preceding if @current.unindented && @preceding.type?(:project)
       end
-    end
+
   end
 end
