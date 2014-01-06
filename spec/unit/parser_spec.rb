@@ -2,8 +2,29 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Parser do
+    include EntryHelpers
 
-    describe 'create_entry' do
+    describe '::create_entry' do
+
+      let(:entry) { new_entry("\t- an @entry") }
+
+      it 'strips the identifier (-) and indents ' do
+        expect(entry.text_with_trailing_tags).to eq('an @entry')
+      end
+
+      it 'separates out the title portion of the raw text (aka text)' do
+        expect(entry.text).to eq('an')
+      end
+
+      describe 'project with trailing tags' do
+        it 'strips trailing tags before identifying type' do
+          entry = new_entry("project: @with @trailing(tags)")
+          expect(entry.type).to equal(:project)
+        end
+      end
+    end
+
+    describe 'type identification' do
 
       describe 'recognizes basic entry types' do
         specify('a project') { expect('a project:').to be_identified_as_a(:project) }
@@ -15,11 +36,21 @@ module TaskpaperUtils
         it 'recognizes tasks that end with a colon' do
           expect('- task or project?:').to be_identified_as_a(:task)
         end
+
+        it 'recognizes projects with trailing tags' do
+          # see '::create_entry spec'
+        end
       end
 
       RSpec::Matchers.define :be_identified_as_a do |type|
         match do |raw_text|
-          Parser.create_entry(raw_text).type == type
+          @text = raw_text
+          @actual = Parser.identify_type(raw_text)::TYPE
+          @actual == type
+        end
+
+        failure_message_for_should do
+          "Expected '#{@text}' to be identified as a '#{type}', not '#{@actual}'"
         end
       end
 
@@ -134,29 +165,70 @@ module TaskpaperUtils
 
     end
 
-    describe '#strip_leave_indents:' do
+    describe '::strip_leave_indents:' do
 
       it 'strips line terminators' do
-        expect("a line\n").to be_stripped_into('a line')
+        expect(strip_leave_indents("a line\n")).to eq('a line')
       end
 
       it 'strips leading and trailing spaces' do
-        expect('  spacious  ').to be_stripped_into('spacious')
+        expect(strip_leave_indents('  spacious  ')).to eq('spacious')
       end
 
       it 'preserves leading tabs' do
-        expect("\tstill indented!").to be_stripped_into("\tstill indented!")
+        expect(strip_leave_indents("\tstill indented!")).to eq("\tstill indented!")
       end
 
-      RSpec::Matchers.define :be_stripped_into do |expected|
-        match do |str|
-          Parser.strip_leave_indents(str) == expected
-        end
+      def strip_leave_indents(str)
+        Parser.strip_leave_indents(str)
       end
 
     end
 
-    describe '#parse_tags' do
+    describe '::split_text_and_trailing_tags' do
+
+      it 'returns [input string, blank] when it has no tags' do
+        expect('no tags').to be_split_into_text('no tags').with_trailing_tags('')
+      end
+
+      it 'strips a single trailing tag' do
+        expect('one @tag').to be_split_into_text('one').with_trailing_tags(' @tag')
+      end
+
+      it 'strips multiple trailing tags' do
+        expect('1 @2 @3') .to be_split_into_text('1').with_trailing_tags(' @2 @3')
+      end
+
+      it 'does not strip tags in between text' do
+        expect('in @btw een').to be_split_into_text('in @btw een').with_trailing_tags('')
+      end
+
+      it 'considers the first tag to be text if the line is only tags' do
+        expect('@all(words) @are(tags)')
+          .to be_split_into_text('@all(words)').with_trailing_tags(' @are(tags)')
+      end
+
+      RSpec::Matchers.define :be_split_into_text do |text|
+
+        chain(:with_trailing_tags) do |tags|
+          @tags = tags
+        end
+
+        match do |actual|
+          @actual = Parser.split_text_and_trailing_tags(actual)
+          @expected = [text, @tags]
+          @actual == @expected
+        end
+
+        failure_message_for_should do
+          "Expected\n#{expected}, but was\n#{actual}"
+        end
+
+      end
+
+    end
+
+    describe '::parse_tags' do
 
       it 'returns an empty array if there are no tags' do
         expect(Parser.parse_tags('no tags')).to be_empty

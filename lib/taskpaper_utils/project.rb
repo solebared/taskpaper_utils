@@ -3,15 +3,21 @@ module TaskpaperUtils
   # Represents a project
   class Project < Entry
 
-    def text
-      raw_text.sub(/:$/, '')
-    end
+    TYPE = :project
 
     alias_method :title, :text
 
-    def type
-      :project
-    end
+    # @api private
+    class Identifier
 
+      def self.accepts(str)
+        str.end_with?(':') ? Project : false
+      end
+
+      def self.strip(str)
+        str.sub(/:\Z/, '')
+      end
+
+    end
   end
 end

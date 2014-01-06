@@ -2,12 +2,13 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Note do
+    include EntryHelpers
 
-    let(:note) { Note.new('any text') }
+    let(:note) { new_entry('any text') }
 
-    describe '#text' do
-      it 'returns the raw text' do
-        expect(note.text).to eql 'any text'
+    describe 'Identifier' do
+      specify 'strip just returns the raw text' do
+        expect(Note::Identifier.strip('any text')).to eq('any text')
       end
     end
 

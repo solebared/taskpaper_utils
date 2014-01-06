@@ -8,6 +8,10 @@ module TaskpaperUtils
     # The entry to which this one belongs
     attr_reader :parent
 
+    # Text of the entry without tabs, identifiers (such as '-' or ':')
+    # or trailing tags
+    attr_reader :text
+
     # @api private
     attr_writer :parent
 
@@ -20,8 +24,13 @@ module TaskpaperUtils
     attr_writer :tags
 
     # @api private
-    def initialize(raw_text)
-      @raw_text = raw_text
+    def initialize(raw_text, text, trailing_tags)
+      @raw_text, @text, @trailing_tags = raw_text, text, trailing_tags
+    end
+
+    # @return [String] Text of the entry with trailing tags (no tabs or identifiers)
+    def text_with_trailing_tags
+      @text + @trailing_tags
     end
 
     # Convenience accessor for the root document
@@ -36,6 +45,10 @@ module TaskpaperUtils
     def tag(name)
       tag, value = @tags.detect { |tag, value| tag == name }
       tag && (value || true)
+    end
+
+    def type
+      self.class::TYPE
     end
 
     # helpful for troubleshooting, but not otherwise needed

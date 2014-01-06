@@ -2,12 +2,13 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Project do
+    include EntryHelpers
 
-    let(:project) { Project.new('Project') }
+    let(:project) { new_entry('Project:') }
 
-    describe '#text' do
+    describe 'strip identifier' do
       it 'strips trailing colon' do
-        expect(project.text).to eql 'Project'
+        expect(Project::Identifier.strip('Project:')).to eql 'Project'
       end
     end
 

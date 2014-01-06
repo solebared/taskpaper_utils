@@ -2,8 +2,9 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Entry do
+    include EntryHelpers
 
-    let(:entry) { Entry.new('any entry') }
+    let(:entry) { new_entry('any entry') }
 
     it 'generates getters for notes and tasks' do
       expect(entry.public_methods).to include(:notes, :tasks)

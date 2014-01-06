@@ -6,21 +6,25 @@ module TaskpaperUtils
   # @api private
   module Parser
 
+    TAG_ATOM = /@(\w+)(?:\((.+?)\))?/
+
     def self.strip_leave_indents(str)
       str.rstrip.sub(/\A */, '')
     end
 
     def self.create_entry(raw_text)
-      ( case
-        when raw_text =~ /\A(\s*)?-/  then Task
-        when raw_text.end_with?(':')  then Project
-        else                               Note
-        end
-      ).new(raw_text)
+      text, trailing_tags = Parser.split_text_and_trailing_tags(raw_text.strip)
+      type_class = Parser.identify_type(text)
+      text = type_class::Identifier.strip(text)
+      type_class.new(raw_text, text, trailing_tags)
+    end
+
+    def self.identify_type(text)
+      Task::Identifier.accepts(text) || Project::Identifier.accepts(text) || Note
     end
 
     def self.parse_tags(line)
-      line.scan(/@(\w+)(?:\((.+?)\))?/)
+      line.scan(TAG_ATOM)
     end
 
     def self.parse(enum)
@@ -29,6 +33,14 @@ module TaskpaperUtils
         EntryParser.parse_entry(strip_leave_indents(line), previous)
       end
       document
+    end
+
+    def self.split_text_and_trailing_tags(str)
+      if match = /( #{TAG_ATOM})+\Z/.match(str)
+        [match.pre_match, match[0]]
+      else
+        [str, '']
+      end
     end
 
     private

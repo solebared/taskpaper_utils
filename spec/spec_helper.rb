@@ -34,3 +34,4 @@ if ENV['COVERAGE'] == 'true'
 end
 
 require_relative '../lib/taskpaper_utils'
+require_relative './support/helpers'

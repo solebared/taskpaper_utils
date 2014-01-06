@@ -2,17 +2,13 @@ require 'spec_helper'
 
 module TaskpaperUtils
   describe Task do
+    include EntryHelpers
 
-    let(:task)    { Task.new('- task') }
-    let(:subtask) { Task.new("\t- subtask") }
+    let(:task)    { new_entry('- task') }
+    let(:subtask) { new_entry("\t- subtask") }
 
-    describe '#text' do
-      it 'strips leading dash' do
-        expect(task.text).to eql 'task'
-      end
-      it 'strips leading tab as well' do
-        expect(subtask.text).to eql 'subtask'
-      end
+    specify 'identifier strips leading dash' do
+      expect(Task::Identifier.strip('- task')).to eql 'task'
     end
 
     it 'aliases #tasks as #subtasks' do

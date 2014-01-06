@@ -3,15 +3,21 @@ module TaskpaperUtils
   # Represents a single task
   class Task < Entry
 
+    TYPE = :task
+
     alias_method :subtasks, :tasks
 
-    def text
-      raw_text.strip.sub(/^- /, '')
-    end
+    # @api private
+    class Identifier
 
-    def type
-      :task
-    end
+      def self.accepts(str)
+        str =~ /\A(\s*)?-/ ? Task : false
+      end
 
+      def self.strip(str)
+        str.sub(/\A- /, '')
+      end
+
+    end
   end
 end
