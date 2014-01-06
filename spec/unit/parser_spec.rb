@@ -16,44 +16,37 @@ module TaskpaperUtils
         expect(entry.text).to eq('an')
       end
 
-      describe 'project with trailing tags' do
-        it 'strips trailing tags before identifying type' do
-          entry = new_entry('project: @with @trailing(tags)')
-          expect(entry.type).to equal(:project)
+      describe 'type identification' do
+
+        describe 'recognizes basic entry types' do
+          specify('a project') { expect('a project:').to be_identified_as_a(:project) }
+          specify('a task   ') { expect('- a task  ').to be_identified_as_a(:task) }
+          specify('a note   ') { expect('a note    ').to be_identified_as_a(:note) }
         end
+
+        describe 'edge cases:' do
+          it 'recognizes tasks that end with a colon' do
+            expect('- task or project?:').to be_identified_as_a(:task)
+          end
+
+          it 'recognizes projects with trailing tags' do
+            expect('project: @with @trailing(tags)').to be_identified_as_a(:project)
+          end
+        end
+
+        RSpec::Matchers.define :be_identified_as_a do |type|
+          match do |raw_text|
+            @text = raw_text
+            @actual = Parser.create_entry(raw_text).type
+            @actual == type
+          end
+
+          failure_message_for_should do
+            "Expected '#{@text}' to be identified as a '#{type}', not '#{@actual}'"
+          end
+        end
+
       end
-    end
-
-    describe 'type identification' do
-
-      describe 'recognizes basic entry types' do
-        specify('a project') { expect('a project:').to be_identified_as_a(:project) }
-        specify('a task   ') { expect('- a task  ').to be_identified_as_a(:task) }
-        specify('a note   ') { expect('a note    ').to be_identified_as_a(:note) }
-      end
-
-      describe 'edge cases:' do
-        it 'recognizes tasks that end with a colon' do
-          expect('- task or project?:').to be_identified_as_a(:task)
-        end
-
-        it 'recognizes projects with trailing tags' do
-          # see '::create_entry spec'
-        end
-      end
-
-      RSpec::Matchers.define :be_identified_as_a do |type|
-        match do |raw_text|
-          @text = raw_text
-          @actual = Parser.identify_type(raw_text)::TYPE
-          @actual == type
-        end
-
-        failure_message_for_should do
-          "Expected '#{@text}' to be identified as a '#{type}', not '#{@actual}'"
-        end
-      end
-
     end
 
     describe 'parent indentification' do
@@ -253,6 +246,22 @@ module TaskpaperUtils
         failure_message_for_should do |string|
           "Expected '#{string}' to parse into tags\n#{array_of_tags} but got\n#{@actual}"
         end
+      end
+
+    end
+
+    describe '::strip_identifier' do
+
+      it 'strips leading dash and indents from tasks' do
+        expect(Parser.strip_identifier(:task, "\t\t- todo")).to eql 'todo'
+      end
+
+      it 'strips trailing colon from project' do
+        expect(Parser.strip_identifier(:project, 'things:')).to eql 'things'
+      end
+
+      it 'just returns the input text for a note' do
+        expect(Parser.strip_identifier(:note, 'any text')).to eq('any text')
       end
 
     end

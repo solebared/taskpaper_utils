@@ -7,6 +7,11 @@ module TaskpaperUtils
   class Parser
 
     TAG_ATOM = /@(\w+)(?:\((.+?)\))?/
+    IDENTIFIERS = {
+      project: /:\Z/,
+      task:    /\A(\s*)?- /,
+      note:    ''
+    }
 
     def self.strip_leave_indents(str)
       str.rstrip.sub(/\A */, '')
@@ -14,13 +19,21 @@ module TaskpaperUtils
 
     def self.create_entry(raw_text)
       text, trailing_tags = split_text_and_trailing_tags(raw_text.strip)
-      type_class = identify_type(text)
-      text = type_class::Identifier.strip(text)
-      type_class.new(raw_text, text, trailing_tags)
+      type = identify_type(text)
+      text = strip_identifier(type, text)
+      Entry.new(type, raw_text, text, trailing_tags)
+    end
+
+    def self.strip_identifier(type, text)
+      text.sub(IDENTIFIERS[type], '')
     end
 
     def self.identify_type(text)
-      Task::Identifier.accepts(text) || Project::Identifier.accepts(text) || Note
+      identifiable_as(:task, text) || identifiable_as(:project, text) || :note
+    end
+
+    def self.identifiable_as(type, str)
+      str =~ IDENTIFIERS[type] ? type : false
     end
 
     def self.parse_tags(line)

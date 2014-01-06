@@ -5,12 +5,17 @@ module TaskpaperUtils
     (include EntryContainer).for_children_of_type :task, :note
     include IndentAware
 
-    # The entry to which this one belongs
-    attr_reader :parent
+    alias_method :subtasks, :tasks
 
     # Text of the entry without tabs, identifiers (such as '-' or ':')
     # or trailing tags
     attr_reader :text
+
+    # Type of entry: one of :project, :task or :note
+    attr_reader :type
+
+    # The entry to which this one belongs
+    attr_reader :parent
 
     # @api private
     attr_writer :parent
@@ -24,13 +29,17 @@ module TaskpaperUtils
     attr_writer :tags
 
     # @api private
-    def initialize(raw_text, text, trailing_tags)
-      @raw_text, @text, @trailing_tags = raw_text, text, trailing_tags
+    def initialize(type, raw_text, text, trailing_tags) # rubocop:disable ParameterLists
+      @type, @raw_text, @text, @trailing_tags = type, raw_text, text, trailing_tags
     end
 
     # @return [String] Text of the entry with trailing tags (no tabs or identifiers)
     def text_with_trailing_tags
       @text + @trailing_tags
+    end
+
+    def matches?(str)
+      text == str || text_with_trailing_tags == str
     end
 
     # Convenience accessor for the root document
@@ -45,10 +54,6 @@ module TaskpaperUtils
     def tag(name)
       tag, value = @tags.detect { |tag, value| tag == name }
       tag && (value || true)
-    end
-
-    def type
-      self.class::TYPE
     end
 
     # helpful for troubleshooting, but not otherwise needed

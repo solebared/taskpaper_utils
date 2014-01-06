@@ -56,10 +56,8 @@ module TaskpaperUtils
     #
     # @param [String] the text of the entry to be found without any
     #   type identifiers such as `- ` for tasks and `:` for projects
-    def [](search)
-      children.detect do |child|
-        child.text == search || child.text_with_trailing_tags == search
-      end
+    def [](str)
+      children.detect { |child| child.matches?(str) }
     end
 
     # @param (see #type?)

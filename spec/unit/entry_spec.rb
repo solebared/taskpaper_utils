@@ -10,6 +10,11 @@ module TaskpaperUtils
       expect(entry.public_methods).to include(:notes, :tasks)
     end
 
+    it 'aliases #tasks as #subtasks' do
+      entry.add_child(new_entry('- subtask'))
+      expect(entry.subtasks).to eql(entry.tasks)
+    end
+
     it 'delegates #document to its parent' do
       entry.parent = double('parent-entry')
       entry.parent.should_receive('document')
@@ -37,6 +42,33 @@ module TaskpaperUtils
         end
 
       end
+    end
+
+    describe '#matches?' do
+
+      let(:entry) { new_entry("\t- a task") }
+
+      it 'uses the text stripped of signifiers (such as the dash before a task)' do
+        expect(entry.matches?('a task')).to be_true
+      end
+
+      it 'matches the whole text, not just a part of it' do
+        expect(entry.matches?('a')).to be_false
+      end
+
+      describe 'text with @tags' do
+
+        let!(:tagged) { new_entry('- with @a(tag)') }
+
+        it 'matches without trailing tag' do
+          expect(tagged.matches?('with')).to be_true
+        end
+
+        it 'matches with the whole text including tags' do
+          expect(tagged.matches?('with @a(tag)')).to be_true
+        end
+      end
+
     end
   end
 end

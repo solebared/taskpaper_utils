@@ -3,9 +3,6 @@
    entry_container
    document
    entry
-   project
-   task
-   note
    parser
 ).each do |lib|
   require "taskpaper_utils/#{lib}"

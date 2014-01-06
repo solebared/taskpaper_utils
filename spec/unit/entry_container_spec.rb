@@ -55,32 +55,12 @@ module TaskpaperUtils
 
       let(:project) { new_entry('p:') }
       let!(:note)   { project.add_child(new_entry('a note')) }
-      let!(:task)   { project.add_child(new_entry('- a task')) }
 
       it 'finds a child referenced by text' do
         expect(project['a note']).to eq(note)
       end
 
-      it 'uses the text stripped of signifiers (such as the dash before a task)' do
-        expect(project['a task']).to eq(task)
-      end
-
-      it 'matches the whole text, not just a part of it' do
-        expect(project['a']).to be_nil
-      end
-
-      describe 'text with @tags' do
-
-        let!(:tagged) { project.add_child(new_entry('- with @a(tag)')) }
-
-        it 'allows referencing without trailing tag' do
-          expect(project['with']).to eq(tagged)
-        end
-
-        it 'allows referencing with the whole text including tags' do
-          expect(project['with @a(tag)']).to eq(tagged)
-        end
-      end
+      # see specs for Entry#matches? for detailed cases
     end
   end
 end
