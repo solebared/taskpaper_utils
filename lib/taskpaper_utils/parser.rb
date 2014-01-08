@@ -13,10 +13,6 @@ module TaskpaperUtils
       note:    ''
     }
 
-    def self.strip_leave_indents(str)
-      str.rstrip.sub(/\A */, '')
-    end
-
     def self.create_entry(raw_text)
       text, trailing_tags = split_text_and_trailing_tags(raw_text.strip)
       type = identify_type(text)

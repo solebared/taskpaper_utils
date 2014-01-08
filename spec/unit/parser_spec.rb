@@ -151,26 +151,6 @@ module TaskpaperUtils
 
     end
 
-    describe '::strip_leave_indents:' do
-
-      it 'strips line terminators' do
-        expect(strip_leave_indents("a line\n")).to eq('a line')
-      end
-
-      it 'strips leading and trailing spaces' do
-        expect(strip_leave_indents('  spacious  ')).to eq('spacious')
-      end
-
-      it 'preserves leading tabs' do
-        expect(strip_leave_indents("\tstill indented!")).to eq("\tstill indented!")
-      end
-
-      def strip_leave_indents(str)
-        Parser.strip_leave_indents(str)
-      end
-
-    end
-
     describe '::split_text_and_trailing_tags' do
 
       it 'returns [input string, blank] when it has no tags' do
