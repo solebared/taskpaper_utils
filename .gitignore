@@ -1,6 +1,8 @@
 .bundle/
 .virb/
+.yardoc/
 coverage/
+doc/
 measurements/
 tmp/
 

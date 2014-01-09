@@ -21,7 +21,7 @@ module TaskpaperUtils
 
     private
 
-      def identify_parent
+      def identify_parent   # rubocop:disable IndentationWidth
         parent_if_preceding_is_document ||
         parent_if_preceding_less_indented ||
         parent_if_preceding_equally_indented ||

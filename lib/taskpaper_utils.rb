@@ -15,7 +15,7 @@ module TaskpaperUtils
 
   # Parse the taskpaper formated document
   #
-  # @param [String] at file path
+  # @param path [String] of file to parse
   # @return [Document]
   def self.parse(path)
     File.open(path) { |file| Parser.new.parse(file) }
@@ -23,8 +23,8 @@ module TaskpaperUtils
 
   # Serialize a {Document} to a file in taskpaper format
   #
-  # @param [Document]
-  # @param [String] path to serialize the document to (will be overwritten)
+  # @param document [Document] to serialize
+  # @param path [String] of file to serialize to (will be overwritten)
   def self.save(document, path)
     File.open(path, 'w') do |file|
       document.dump { |raw_text| file.puts(raw_text) }

@@ -1,27 +1,27 @@
 module TaskpaperUtils
 
-  # Represents a single entry, i.e: a project, task or note
+  # Represents a single entry (project, task or note)
   class Entry
     include IndentAware
     extend Forwardable
 
-    # !method tasks
+    # @!method tasks
     #   @return [Array<Entry>] any children of type :task
-    # !method notes
+    # @!method notes
     #   @return [Array<Entry>] any children of type :note
     (include EntryContainer).for_children_of_type :task, :note
 
     # (see #tasks)
     alias_method :subtasks, :tasks
 
-    # !attribute [r] raw_text
+    # @!attribute [r] raw_text
     #   @return [String] the raw single line of text for this entry in taskpaper format
-    # !attribute [r] type
+    # @!attribute [r] type
     #   @return [Symbol<:project, :task, :note>]
-    # !attribute [r] text
+    # @!attribute [r] text
     #   @return [String] the text of the entry without tabs,
     #     identifiers (such as '-' or ':') or trailing tags
-    # !attribute [r] trailing_tags
+    # @!attribute [r] trailing_tags
     #   @return [String] any tags that follow the text or an empty string ('') otherwise.
     #     Tags mixed in with the text are not considered trailing tags.
     #     Includes a preceding space if trailing tags exist.
@@ -37,7 +37,7 @@ module TaskpaperUtils
     # @api private
     attr_writer :parent
 
-    # @param [[String, String]] the set of tags to initialize this entry with
+    # @param tags [[String, String]] the set of tags to initialize this entry with
     #
     # @api private
     attr_writer :tags
@@ -59,7 +59,7 @@ module TaskpaperUtils
       text + trailing_tags
     end
 
-    # @param [String]
+    # @param text_to_match [String]
     # @return [Boolean] whether the string provided matches the entry text.
     #   Tests against the text with and without trailing tags (@see !trailing_tags).
     def matches?(str)
@@ -72,7 +72,7 @@ module TaskpaperUtils
       parent.document
     end
 
-    # @param String the name of the tag to lookup
+    # @param name [String] the name of the tag to lookup
     # @return [nil] if this entry is not tagged with the given name
     # @return [true] if its tagged with no value
     # @return [String] the value of the tag if a value exists (eg: @tag(value))

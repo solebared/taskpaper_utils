@@ -30,7 +30,7 @@ module TaskpaperUtils
 
     # Adds an entry to the container
     #
-    # @param [#text, #type, #dump]
+    # @param entry [#parent, #matches?, #type, #dump]
     # @return the added entry
     def add_child(entry)
       children << entry
@@ -54,10 +54,10 @@ module TaskpaperUtils
     #   #   - another
     #   document['a project'][another]   # returns the second Task
     #
-    # @param [String] the text of the entry to be found without any
+    # @param text [String] of the entry to be found without any
     #   type identifiers such as `- ` for tasks and `:` for projects
-    def [](str)
-      children.detect { |child| child.matches?(str) }
+    def [](text)
+      children.detect { |child| child.matches?(text) }
     end
 
     # @param (see #type?)
@@ -66,7 +66,7 @@ module TaskpaperUtils
       children.select { |child| child.type?(entry_type) }
     end
 
-    # @param [:project, :task, :note]
+    # @param of [:project, :task, :note]
     # @return Whether this Entry is of the specified type
     def type?(of)
       type == of
