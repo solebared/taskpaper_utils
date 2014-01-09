@@ -1,10 +1,21 @@
 module TaskpaperUtils
+
   # Root object representing a taskpaper formated document.
   # Contains nested {Entry} objects that represent projects, tasks and notes.
   class Document
-    (include EntryContainer).for_children_of_type :project, :task, :note
+    include EntryContainer
 
-    # @return [nil] nil since it is the root object
+    # @!method projects
+    #   @return [Array<Entry>] any children of type :project
+    # @!macro contains_tasks
+    #   @!method tasks
+    #     @return [Array<Entry>] any children of type :task
+    # @!macro contains_notes
+    #   @!method notes
+    #     @return [Array<Entry>] any children of type :note
+    contains_children_of_type :project, :task, :note
+
+    # @return [nil] nil since this is the root object
     #
     # @api private
     def parent
