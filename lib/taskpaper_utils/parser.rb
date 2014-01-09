@@ -6,44 +6,6 @@ module TaskpaperUtils
   # @api private
   class Parser
 
-    TAG_ATOM = /@(\w+)(?:\((.+?)\))?/
-    IDENTIFIERS = {
-      project: /:\Z/,
-      task:    /\A(\s*)?- /,
-      note:    ''
-    }
-
-    def self.create_entry(raw_text)
-      text, trailing_tags = split_text_and_trailing_tags(raw_text.strip)
-      type = identify_type(text)
-      text = strip_identifier(type, text)
-      Entry.new(type, raw_text, text, trailing_tags)
-    end
-
-    def self.strip_identifier(type, text)
-      text.sub(IDENTIFIERS[type], '')
-    end
-
-    def self.identify_type(text)
-      identifiable_as(:task, text) || identifiable_as(:project, text) || :note
-    end
-
-    def self.identifiable_as(type, str)
-      str =~ IDENTIFIERS[type] ? type : false
-    end
-
-    def self.parse_tags(line)
-      line.scan(TAG_ATOM)
-    end
-
-    def self.split_text_and_trailing_tags(str)
-      if matched = /( #{TAG_ATOM})+\Z/.match(str) # rubocop:disable AssignmentInCondition
-        [matched.pre_match, matched[0]]
-      else
-        [str, '']
-      end
-    end
-
     def parse(enum)
       @current = document = Document.new
       enum.each { |line| parse_line(line) }
@@ -52,7 +14,7 @@ module TaskpaperUtils
 
     def parse_line(line)
       @preceding = @current
-      @current = Parser.create_entry(line)
+      @current = Entry.parse(line)
       identify_parent.add_child(@current)
       @current
     end

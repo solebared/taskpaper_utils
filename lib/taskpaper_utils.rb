@@ -2,6 +2,7 @@
    indent_aware
    entry_container
    document
+   raw_entry
    entry
    parser
 ).each do |lib|
