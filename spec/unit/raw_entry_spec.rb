@@ -19,16 +19,20 @@ module TaskpaperUtils
         end
       end
 
-      describe 'with trailing tags' do
+      describe 'tags' do
 
-        let(:tagged) { raw_entry('- with @trailing(tag)') }
+        let(:tagged) { raw_entry('- an @entry with @trailing(tag)') }
 
         it 'separates out the title portion of the raw text (aka text)' do
-          expect(tagged.text).to eq('with')
+          expect(tagged.text).to eq('an @entry with')
         end
 
         it 'captures the trailing tags after the title' do
           expect(tagged.trailing_tags).to eq(' @trailing(tag)')
+        end
+
+        it 'initializes with both inline and trailing tags' do
+          expect(tagged.tags).to eq([['entry', nil], %w(trailing tag)])
         end
       end
 

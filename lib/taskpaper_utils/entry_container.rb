@@ -63,6 +63,12 @@ module TaskpaperUtils
       children.detect { |child| child.matches?(text) }
     end
 
+    def filter(tag, value = nil)
+      children.flat_map do |child|
+        child.tag?(tag, value) ? child : child.filter(tag, value)
+      end
+    end
+
     # @param (see #type?)
     # @return [Array] Children of the specified type
     #

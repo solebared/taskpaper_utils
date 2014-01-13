@@ -23,7 +23,9 @@ DuplicateMethodCall:
   allow_calls: []
 FeatureEnvy:
   enabled: true
-  exclude: ['TaskpaperUtils::RawEntry#split_text_and_trailing_tags']
+  exclude: 
+  - TaskpaperUtils::RawEntry#split_text_and_trailing_tags
+  - TaskpaperUtils::EntryContainer#filter
 IrresponsibleModule:
   enabled: true
   exclude: []
@@ -61,7 +63,7 @@ TooManyMethods:
 TooManyStatements:
   enabled: true
   exclude:
-  - each
+  - TaskpaperUtils::RawEntry#initialize
   max_statements: 4
 UncommunicativeMethodName:
   enabled: true

@@ -14,13 +14,14 @@ module TaskpaperUtils
       note:    ''
     }
 
-    attr_reader :raw_text, :type, :text, :trailing_tags
+    attr_reader :raw_text, :type, :text, :trailing_tags, :tags
 
     def initialize(raw_text)
       @raw_text = raw_text
       @text, @trailing_tags = split_text_and_trailing_tags
       @type = identify_type
       @text = strip_identifier
+      @tags = parse_tags
     end
 
     def split_text_and_trailing_tags

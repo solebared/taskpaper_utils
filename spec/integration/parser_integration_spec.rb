@@ -12,7 +12,7 @@ module TaskpaperUtils
           "Project A:
            - task one
            \t- subtask
-           - task two
+           - task two @priority(1)
            a note
            \t- subtask of a note
            Project B:")
@@ -37,6 +37,17 @@ module TaskpaperUtils
       it 'contains notes within projects' do
         expect(project_a).to have(1).notes
         expect(project_a['a note']).to_not be_nil
+      end
+
+      describe 'tags' do
+
+        it 'recognizes tags' do
+          expect(project_a['task two'].tag?(:priority)).to be_true
+        end
+
+        it 'allows filtering by tag' do
+          expect(document.filter(:priority, '1')).to eql([project_a['task two']])
+        end
       end
     end
 

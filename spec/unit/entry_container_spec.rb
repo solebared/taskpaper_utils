@@ -4,6 +4,8 @@ module TaskpaperUtils
   describe EntryContainer do
     include ParsingHelpers
 
+    let(:project) { new_entry('project:') }
+
     describe '#dump' do
 
       it "yields it's raw text" do
@@ -11,7 +13,6 @@ module TaskpaperUtils
       end
 
       it "provides it's children's raw text to the collector" do
-        project = new_entry('project:')
         project.add_child new_entry("\t- task")
         project.add_child new_entry("\t\t- subtask")
         expect { |b| project.dump(&b) }
@@ -32,7 +33,6 @@ module TaskpaperUtils
     describe '#children of type' do
 
       it 'finds children of the specified type' do
-        project = new_entry('project:')
         task = project.add_child new_entry("\t- task")
         note = project.add_child new_entry("\ta note")
         expect(project.children_of_type(:task)).to include task
@@ -44,7 +44,6 @@ module TaskpaperUtils
     describe '#add_child' do
 
       specify "adding a child sets it's parent" do
-        project = new_entry('project:')
         task    = project.add_child new_entry('- task')
         expect(task.parent).to eql project
       end
@@ -53,7 +52,6 @@ module TaskpaperUtils
 
     describe '#[]' do
 
-      let(:project) { new_entry('p:') }
       let!(:note)   { project.add_child(new_entry('a note')) }
 
       it 'finds a child referenced by text' do
@@ -61,6 +59,47 @@ module TaskpaperUtils
       end
 
       # see specs for Entry#matches? for detailed cases
+    end
+
+    describe 'filter' do
+
+      let(:project_a) { document['project a'] }
+      let(:project_b) { document['project b'] }
+      let(:document) do
+        parse_doc("project a:
+                   \t- task without tags
+                   \t- task with @tag
+                   project b: @tag
+                   \t- parent task
+                   \t\t- subtask with @tag
+                   project c:
+                   \t- parent with @tag @in @c
+                   \t\t- subtask also with @tag")
+      end
+
+      it 'finds children with the given tag' do
+        expect(project_a.filter('tag').map(&:text)).to eq(['task with'])
+      end
+
+      describe 'nested matches' do
+
+        # note: we use .map(&:text) here because it verifies both the size and
+        # contents of the filtered entries
+
+        it 'finds matching nested children' do
+          expect(project_b.filter(:tag).map(&:text)).to eq(['subtask with'])
+        end
+
+        it 'does not dig into children of a matching parent' do
+          # 'parent with @tag @in @c', but not 'subtask also with @tag'
+          expect(document['project c'].filter(:tag).map(&:text)).to eq(['parent with'])
+        end
+
+        it 'combines matching entries from different levels of the doc' do
+          expect(document.filter(:tag).map(&:text_with_trailing_tags))
+            .to eq(['task with @tag', 'project b: @tag', 'parent with @tag @in @c'])
+        end
+      end
     end
   end
 end

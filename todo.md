@@ -1,8 +1,6 @@
 todo:
 ---
 
-* feature: add tag parsing
-  - integrate tags
 * require files as needed instead of all up front?
 * feature: blank lines
 * add holepicker to rake ci

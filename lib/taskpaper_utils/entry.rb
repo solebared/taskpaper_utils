@@ -36,11 +36,6 @@ module TaskpaperUtils
     # @api private
     attr_writer :parent
 
-    # @param value [[String, String]] the set of tags to initialize this entry with
-    #
-    # @api private
-    attr_writer :tags
-
     # @api private
     def self.parse(raw_text)
       new(RawEntry.new(raw_text))
@@ -52,10 +47,11 @@ module TaskpaperUtils
     end
 
     # @return [String] Text of the entry with trailing tags included.
-    #   Excludes tabs and identifiers.
+    #   Excludes tabs and identifiers but keeps the colon(:) for projects
     #   @see {#trailing_tags}
     def text_with_trailing_tags
-      text + trailing_tags
+      # todo: type smell?
+      "#{text}#{type?(:project) ? ':' : ''}#{trailing_tags}"
     end
 
     # @param string [String] to test against
@@ -72,17 +68,25 @@ module TaskpaperUtils
     end
 
     # @param name [String] the name of the tag to lookup
-    # @return [true] if this entry is tagged with no value (eg: @tag)
+    # @return [String] '' if this entry is tagged with no value (eg: @tag)
     # @return [String] the value of the tag if a value exists (eg: @tag(value))
     # @return [nil] if its not tagged with the given name
-    def tag(name)
-      tag, value = @tags.detect { |tag, value| tag == name }
-      tag && (value || true)
+    def tag_value(name)
+      tag, value = @raw.tags.detect { |tag, value| tag == name.to_s }
+      tag && (value || '')
     end
 
-    # helpful for troubleshooting, but not otherwise needed
+    def tag?(tag, value = nil)
+      if tag_value = tag_value(tag)   # rubocop:disable AssignmentInCondition
+        value ? value.to_s == tag_value : true
+      else
+        false
+      end
+    end
+
+    # only for troubleshooting
     # def inspect
-      # "#<#{self.class.name}:#{@raw_text}>"
+    #   "#<#{self.class.name}:#{text}>"
     # end
   end
 end

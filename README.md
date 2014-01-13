@@ -38,12 +38,18 @@ Or build the gem yourself:
     # Document contains projects, tasks and notes 
     project = document.projects.first
 
+    # find all entries in the project with an @done tag
+    project.filter(:done)
+
+    # find all entries with a specific priority
+    project.filter(:priority, '1')
+
     # reference child entries using their text
     task = project['add search feature']
     puts task.text        # => "add search feature"
     puts task.raw_text    # => "\t- add search feature"
 
-    # access other child entries
+    # access nested child entries
     puts task.notes.map(&:text)
     puts task.subtasks.map(&:text)
     
@@ -58,9 +64,8 @@ The public interface hasn't settled down yet.
 
 A loose roadmap:
 
-- Parse tags
 - Evolve API for adding, removing and modifying entries
-- Evolve search and filtering API
+- Expand search and filtering API
 - ... ?
 
 ## Contributing

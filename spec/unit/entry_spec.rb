@@ -21,27 +21,85 @@ module TaskpaperUtils
       entry.document
     end
 
-    describe 'tags' do
+    describe '#tag_value, #tag?' do
 
-      describe 'initializing and retrieving tags' do
+      let(:entry) { new_entry('with @empty tag and one @with(value)') }
 
-        before do
-          entry.tags = [['empty', nil], %w(with value)]
+      describe 'when the tag does not exist' do
+
+        specify '#tag? returns false' do
+          expect(entry.tag?('nope')).to equal(false)
         end
 
-        it 'returns nil if the tag does not exist' do
-          expect(entry.tag('nope')).to be_nil
-        end
-
-        it 'returns true if the tag exists without a value' do
-          expect(entry.tag('empty')).to equal(true)
-        end
-
-        it 'returns value if the tag exists with a value' do
-          expect(entry.tag('with')).to eql('value')
+        specify '#tag_value returns nil' do
+          expect(entry.tag_value('nope')).to be_nil
         end
 
       end
+
+      describe 'when the tag exists without a value' do
+
+        specify '#tag? returns true' do
+          expect(entry.tag?('empty')).to equal(true)
+        end
+
+        specify '#tag_value returns an empty string' do
+          expect(entry.tag_value('empty')).to eq('')
+        end
+
+      end
+
+      describe 'when the tag exists with a value' do
+
+        describe '#tag?' do
+
+          it 'returns true when given no value' do
+            expect(entry.tag?('with')).to equal(true)
+          end
+
+          it 'returns true given the matching value' do
+            expect(entry.tag?('with', 'value')).to equal(true)
+          end
+
+          it 'returns false given a different value' do
+            expect(entry.tag?('with', 'wrong value')).to equal(false)
+          end
+
+          it 'works with symbols' do
+            expect(entry.tag?(:with, :value)).to equal(true)
+          end
+
+        end
+
+        describe '#tag_value' do
+
+          it 'returns the value' do
+            expect(entry.tag_value('with')).to eql('value')
+          end
+
+          it 'works with a symbol' do
+            expect(entry.tag_value(:with)).to eql('value')
+          end
+
+        end
+      end
+
+    end
+
+    describe '#text_with_trailing_tags' do
+
+      it 'concatenates text and trailing tags' do
+        entry = new_entry('- with @tag')
+        expect(entry.text).to eq('with')
+        expect(entry.text_with_trailing_tags).to eq('with @tag')
+      end
+
+      it 'inserts a colon before trailing tags for projects' do
+        project = new_entry('project: @with @tag')
+        expect(project.text).to eq('project')
+        expect(project.text_with_trailing_tags).to eq('project: @with @tag')
+      end
+
     end
 
     describe '#matches?' do
@@ -67,8 +125,8 @@ module TaskpaperUtils
         it 'matches with the whole text including tags' do
           expect(tagged.matches?('with @a(tag)')).to be_true
         end
-      end
 
+      end
     end
   end
 end
