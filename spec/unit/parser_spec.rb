@@ -28,7 +28,7 @@ module TaskpaperUtils
           end
 
           it "appends to the end of parent's collection of children" do
-            expect(project.children.last.text).to eql('task y')
+            expect(project.children.last.text).to eq('task y')
           end
 
         end

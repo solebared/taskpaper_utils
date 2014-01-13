@@ -45,7 +45,7 @@ module TaskpaperUtils
 
       specify "adding a child sets it's parent" do
         task    = project.add_child new_entry('- task')
-        expect(task.parent).to eql project
+        expect(task.parent).to eq(project)
       end
 
     end

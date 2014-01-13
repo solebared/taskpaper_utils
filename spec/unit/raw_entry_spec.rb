@@ -56,13 +56,12 @@ module TaskpaperUtils
 
         RSpec::Matchers.define :be_identified_as_a do |type|
           match do |raw_text|
-            @text = raw_text
             @actual = raw_entry(raw_text).type
             @actual == type
           end
 
-          failure_message_for_should do
-            "Expected '#{@text}' to be identified as a '#{type}', not '#{@actual}'"
+          failure_message_for_should do |raw_text|
+            "Expected '#{raw_text}' to be identified as a '#{type}', not '#{@actual}'"
           end
         end
 
@@ -151,11 +150,11 @@ module TaskpaperUtils
     describe '#strip_identifier' do
 
       it 'strips leading dash and indents from tasks' do
-        expect(raw_entry("\t\t- todo").strip_identifier).to eql 'todo'
+        expect(raw_entry("\t\t- todo").strip_identifier).to eq('todo')
       end
 
       it 'strips trailing colon from project' do
-        expect(raw_entry('things:').strip_identifier).to eql 'things'
+        expect(raw_entry('things:').strip_identifier).to eq('things')
       end
 
       it 'just returns the input text for a note' do

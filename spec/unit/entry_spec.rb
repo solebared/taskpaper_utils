@@ -12,7 +12,7 @@ module TaskpaperUtils
 
     it 'aliases #tasks as #subtasks' do
       entry.add_child(new_entry('- subtask'))
-      expect(entry.subtasks).to eql(entry.tasks)
+      expect(entry.subtasks).to eq(entry.tasks)
     end
 
     it 'delegates #document to its parent' do
@@ -74,11 +74,11 @@ module TaskpaperUtils
         describe '#tag_value' do
 
           it 'returns the value' do
-            expect(entry.tag_value('with')).to eql('value')
+            expect(entry.tag_value('with')).to eq('value')
           end
 
           it 'works with a symbol' do
-            expect(entry.tag_value(:with)).to eql('value')
+            expect(entry.tag_value(:with)).to eq('value')
           end
 
         end

@@ -16,7 +16,7 @@ module TaskpaperUtils
         Dir::Tmpname.create('taskpaper_utils_integration_spec-') do |new_file|
           begin
             TaskpaperUtils.save(document, new_file)
-            expect(File.read(exemplar_path)).to eql(File.read(new_file))
+            expect(File.read(exemplar_path)).to eq(File.read(new_file))
           ensure
             File.delete(new_file) if File.exist?(new_file)
           end

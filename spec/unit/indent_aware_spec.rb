@@ -13,10 +13,10 @@ module TaskpaperUtils
 
     describe '#indentation' do
       it 'calculates indentation based on the number of leading tabs' do
-        expect(host('No indents on this line').indentation).to eql 0
-        expect(host("\tOne on this line     ").indentation).to eql 1
-        expect(host("\t\tTwo on this line   ").indentation).to eql 2
-        expect(host("\t\t  Two here as well ").indentation).to eql 2
+        expect(host('No indents on this line').indentation).to eq(0)
+        expect(host("\tOne on this line     ").indentation).to eq(1)
+        expect(host("\t\tTwo on this line   ").indentation).to eq(2)
+        expect(host("\t\t  Two here as well ").indentation).to eq(2)
       end
     end
 

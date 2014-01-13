@@ -20,12 +20,12 @@ module TaskpaperUtils
 
       it 'contains projects' do
         expect(document).to have(2).projects
-        expect(document.projects.map(&:text)).to eql ['Project A', 'Project B']
+        expect(document.projects.map(&:text)).to eq ['Project A', 'Project B']
       end
 
       it 'contains tasks within projects' do
         expect(project_a).to have(2).tasks
-        expect(project_a.tasks.map(&:text)).to eql ['task one', 'task two']
+        expect(project_a.tasks.map(&:text)).to eq ['task one', 'task two']
       end
 
       it 'contains subtasks nested under tasks' do
@@ -46,7 +46,7 @@ module TaskpaperUtils
         end
 
         it 'allows filtering by tag' do
-          expect(document.filter(:priority, '1')).to eql([project_a['task two']])
+          expect(document.filter(:priority, '1')).to eq [project_a['task two']]
         end
       end
     end
@@ -64,7 +64,7 @@ module TaskpaperUtils
 
       it 'adopts the unowned entries' do
         expect(document).to have(4).children
-        expect(document.notes.map(&:text)).to eql ['a note', 'another note']
+        expect(document.notes.map(&:text)).to eq ['a note', 'another note']
         expect(document).to have(1).tasks
         expect(document).to have(1).projects
       end
