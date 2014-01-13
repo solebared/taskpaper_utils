@@ -36,7 +36,7 @@ module TaskpaperUtils
     # @api private
     attr_writer :parent
 
-    # @param tags [[String, String]] the set of tags to initialize this entry with
+    # @param value [[String, String]] the set of tags to initialize this entry with
     #
     # @api private
     attr_writer :tags
@@ -58,11 +58,11 @@ module TaskpaperUtils
       text + trailing_tags
     end
 
-    # @param text_to_match [String]
+    # @param string [String] to test against
     # @return [Boolean] whether the string provided matches the entry text.
     #   Tests against the text with and without trailing tags (see {#trailing_tags}).
-    def matches?(str)
-      text == str || text_with_trailing_tags == str
+    def matches?(string)
+      text == string || text_with_trailing_tags == string
     end
 
     # Convenience accessor for the root document to which this {Entry} belongs

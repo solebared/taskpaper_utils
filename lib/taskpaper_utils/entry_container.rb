@@ -19,7 +19,7 @@ module TaskpaperUtils
 
     # @api private
     def self.included(klass)
-      klass.extend EntryContainer::Generators
+      klass.extend Generators
     end
 
     # @return [Array<Entry>] All contained entries
@@ -29,7 +29,7 @@ module TaskpaperUtils
 
     # Adds an entry to the container
     #
-    # @param [Entry]
+    # @param entry [Entry]
     # @return [Entry] the added entry.
     def add_child(entry)
       children << entry
