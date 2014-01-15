@@ -1,6 +1,7 @@
 todo:
 ---
 
+* rename #filter and add ability to exclude
 * require files as needed instead of all up front?
 * feature: blank lines
 * add holepicker to rake ci
