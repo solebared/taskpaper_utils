@@ -61,7 +61,7 @@ module TaskpaperUtils
       # see specs for Entry#matches? for detailed cases
     end
 
-    describe 'filter' do
+    describe 'tagged' do
 
       let(:project_a) { document['project a'] }
       let(:project_b) { document['project b'] }
@@ -78,25 +78,25 @@ module TaskpaperUtils
       end
 
       it 'finds children with the given tag' do
-        expect(project_a.filter('tag').map(&:text)).to eq(['task with'])
+        expect(project_a.tagged('tag').map(&:text)).to eq(['task with'])
       end
 
       describe 'nested matches' do
 
         # note: we use .map(&:text) here because it verifies both the size and
-        # contents of the filtered entries
+        # contents of the tagged entries
 
         it 'finds matching nested children' do
-          expect(project_b.filter(:tag).map(&:text)).to eq(['subtask with'])
+          expect(project_b.tagged(:tag).map(&:text)).to eq(['subtask with'])
         end
 
         it 'does not dig into children of a matching parent' do
           # 'parent with @tag @in @c', but not 'subtask also with @tag'
-          expect(document['project c'].filter(:tag).map(&:text)).to eq(['parent with'])
+          expect(document['project c'].tagged(:tag).map(&:text)).to eq(['parent with'])
         end
 
         it 'combines matching entries from different levels of the doc' do
-          expect(document.filter(:tag).map(&:text_with_trailing_tags))
+          expect(document.tagged(:tag).map(&:text_with_trailing_tags))
             .to eq(['task with @tag', 'project b: @tag', 'parent with @tag @in @c'])
         end
       end

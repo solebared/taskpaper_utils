@@ -25,7 +25,7 @@ FeatureEnvy:
   enabled: true
   exclude: 
   - TaskpaperUtils::RawEntry#split_text_and_trailing_tags
-  - TaskpaperUtils::EntryContainer#filter
+  - TaskpaperUtils::EntryContainer#tagged
 IrresponsibleModule:
   enabled: true
   exclude: []

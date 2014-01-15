@@ -46,7 +46,7 @@ module TaskpaperUtils
         end
 
         it 'allows filtering by tag' do
-          expect(document.filter(:priority, '1')).to eq [project_a['task two']]
+          expect(document.tagged(:priority, '1')).to eq [project_a['task two']]
         end
       end
     end

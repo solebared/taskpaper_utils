@@ -39,10 +39,10 @@ Or build the gem yourself:
     project = document.projects.first
 
     # find all entries in the project with an @done tag
-    project.filter(:done)
+    project.tagged(:done)
 
     # find all entries with a specific priority
-    project.filter(:priority, '1')
+    project.tagged(:priority, '1')
 
     # reference child entries using their text
     task = project['add search feature']

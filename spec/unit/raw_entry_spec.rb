@@ -150,7 +150,7 @@ module TaskpaperUtils
     describe '#strip_identifier' do
 
       it 'strips leading dash and indents from tasks' do
-        expect(raw_entry("\t\t- todo").strip_identifier).to eq('todo')
+        expect(raw_entry("\t\t- task").strip_identifier).to eq('task')
       end
 
       it 'strips trailing colon from project' do

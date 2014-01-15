@@ -1,3 +1,4 @@
 module TaskpaperUtils
-  VERSION = '0.0.2'
+  # Used by gemspec and available for programatic access
+  VERSION = '0.0.1'
 end

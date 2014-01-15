@@ -63,9 +63,33 @@ module TaskpaperUtils
       children.detect { |child| child.matches?(text) }
     end
 
-    def filter(tag, value = nil)
+    # Find all child entries with a matching tag (and optional value).
+    # Searches the whole entry tree nested under this one.
+    # Matching entries are returned with *all* their children intact,
+    # regardless of whether those children individually match the search criteria.
+    #
+    # @example
+    #   # Given this document:
+    #   # project:
+    #   #   - @tagged task
+    #   #     - @tagged subtask
+    #   #     - subtask without tag
+    #   #   - task without tag
+    #   # second project:
+    #   #   - another task
+    #   #     - another @tagged subtask
+    #   found = document.tagged(:tagged)
+    #   found.size                       # => 2
+    #   found.map(&:text)                # => ['@tagged task', 'another @tagged subtask']
+    #   found.first.children.map(&:text) # => ['@tagged subtask', 'subtask without tag']
+    #
+    # @param tag [String|Symbol] the tag to search for
+    # @param value [String|Symbol] the optional tag(value).
+    #   If provided only entries matching the tag and exact value will be returned.
+    # @return [Array] Matching entries
+    def tagged(tag, value = nil)
       children.flat_map do |child|
-        child.tag?(tag, value) ? child : child.filter(tag, value)
+        child.tag?(tag, value) ? child : child.tagged(tag, value)
       end
     end
 
