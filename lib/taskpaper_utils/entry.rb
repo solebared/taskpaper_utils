@@ -8,7 +8,7 @@ module TaskpaperUtils
 
     # @macro contains_tasks
     # @macro contains_notes
-    contains_children_of_type :task, :note
+    contains_entries_of_type :task, :note
 
     # (see #tasks)
     alias_method :subtasks, :tasks

@@ -13,7 +13,7 @@ module TaskpaperUtils
     # @!macro contains_notes
     #   @!method notes
     #     @return [Array<Entry>] any children of type :note
-    contains_children_of_type :project, :task, :note
+    contains_entries_of_type :project, :task, :note
 
     # @return [nil] nil since this is the root object
     #

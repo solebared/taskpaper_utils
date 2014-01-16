@@ -11,7 +11,7 @@ module TaskpaperUtils
     #
     # @api private
     module Generators
-      def contains_children_of_type(*types)
+      def contains_entries_of_type(*types)
         types.each do |type|
           define_method("#{type.to_s}s") { children_of_type type }
         end
