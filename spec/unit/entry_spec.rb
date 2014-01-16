@@ -11,7 +11,7 @@ module TaskpaperUtils
     end
 
     it 'aliases #tasks as #subtasks' do
-      entry.add_child(new_entry('- subtask'))
+      entry << new_entry('- subtask')
       expect(entry.subtasks).to eq(entry.tasks)
     end
 

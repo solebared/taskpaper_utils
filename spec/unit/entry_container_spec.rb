@@ -13,8 +13,8 @@ module TaskpaperUtils
       end
 
       it "provides it's children's raw text to the collector" do
-        project.add_child new_entry("\t- task")
-        project.add_child new_entry("\t\t- subtask")
+        project << new_entry("\t- task")
+        project << new_entry("\t\t- subtask")
         expect { |b| project.dump(&b) }
         .to yield_successive_args 'project:', "\t- task", "\t\t- subtask"
       end
@@ -22,8 +22,8 @@ module TaskpaperUtils
       describe "when it doesn't have any text" do
         it "skips itself but yields it's children" do
           document = Document.new
-          document.add_child new_entry("\t- one")
-          document.add_child new_entry("\t- two")
+          document << new_entry("\t- one")
+          document << new_entry("\t- two")
           expect { |b| document.dump(&b) }
           .to yield_successive_args "\t- one", "\t- two"
         end
@@ -33,26 +33,29 @@ module TaskpaperUtils
     describe '#children of type' do
 
       it 'finds children of the specified type' do
-        task = project.add_child new_entry("\t- task")
-        note = project.add_child new_entry("\ta note")
+        task = project << new_entry("\t- task")
+        note = project << new_entry("\ta note")
         expect(project.children_of_type(:task)).to include task
         expect(project.children_of_type(:task)).to_not include note
       end
 
     end
 
-    describe '#add_child' do
+    describe '#add_entry' do
 
-      specify "adding a child sets it's parent" do
-        task    = project.add_child new_entry('- task')
+      specify "adding a child entry sets it's parent" do
+        task = project.add_entry new_entry('- task')
         expect(task.parent).to eq(project)
       end
 
+      it 'is aliased as <<' do
+        expect { project << new_entry('e') }.to change(project.children, :size)
+      end
     end
 
     describe '#[]' do
 
-      let!(:note)   { project.add_child(new_entry('a note')) }
+      let!(:note)   { project << new_entry('a note') }
 
       it 'finds a child referenced by text' do
         expect(project['a note']).to eq(note)

@@ -15,7 +15,7 @@ module TaskpaperUtils
     def parse_line(line)
       @preceding = @current
       @current = Entry.parse(line)
-      identify_parent.add_child(@current)
+      identify_parent << @current
       @current
     end
 

@@ -31,11 +31,13 @@ module TaskpaperUtils
     #
     # @param entry [Entry]
     # @return [Entry] the added entry.
-    def add_child(entry)
+    def add_entry(entry)
       children << entry
       entry.parent = self
       entry
     end
+
+    alias_method :<<, :add_entry
 
     # Yields the whole subtree of raw text (starting at this entry) to the
     # block passed in.  First yields own raw_text (if it exists) and then
