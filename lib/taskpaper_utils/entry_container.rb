@@ -5,6 +5,7 @@ module TaskpaperUtils
   # Groups methods included into {Entry} and {Document} and provides most
   # of the public API for working with taskpaper objects.
   module EntryContainer
+    include Enumerable
 
     # Class methods mixed into host when EntryContainer is included
     #
@@ -22,9 +23,14 @@ module TaskpaperUtils
       klass.extend Generators
     end
 
-    # @return [Array<Entry>] All contained entries
-    def children
-      @children ||= []
+    # Iterate over child entries.
+    #
+    # @return [Enumerator] if no block is given
+    # @yield [Entry] each child entry nested under this one
+    #
+    # see Enumerable#each
+    def each(&block)
+      children.each(&block)
     end
 
     # Adds an entry to the container
@@ -48,7 +54,7 @@ module TaskpaperUtils
     #   any of its children correctly indented.
     def dump(&block)
       yield raw_text if respond_to?(:raw_text)
-      children.each { |child| child.dump(&block) }
+      children.each { |entry| entry.dump(&block) }
     end
 
     # Locate a child entry by its text.
@@ -62,7 +68,7 @@ module TaskpaperUtils
     # @param text [String] of the entry to be found without any
     #   type identifiers such as `- ` for tasks and `:` for projects
     def [](text)
-      children.detect { |child| child.matches?(text) }
+      children.detect { |entry| entry.matches?(text) }
     end
 
     # Find all child entries with a matching tag (and optional value).
@@ -81,17 +87,17 @@ module TaskpaperUtils
     #   #   - another task
     #   #     - another @tagged subtask
     #   found = document.tagged(:tagged)
-    #   found.size                       # => 2
-    #   found.map(&:text)                # => ['@tagged task', 'another @tagged subtask']
-    #   found.first.children.map(&:text) # => ['@tagged subtask', 'subtask without tag']
+    #   found.size              # => 2
+    #   found.map(&:text)       # => ['@tagged task', 'another @tagged subtask']
+    #   found.first.map(&:text) # => ['@tagged subtask', 'subtask without tag']
     #
     # @param tag [String|Symbol] the tag to search for
     # @param value [String|Symbol] the optional tag(value).
     #   If provided only entries matching the tag and exact value will be returned.
     # @return [Array] Matching entries
     def tagged(tag, value = nil)
-      children.flat_map do |child|
-        child.tag?(tag, value) ? child : child.tagged(tag, value)
+      children.flat_map do |entry|
+        entry.tag?(tag, value) ? entry : entry.tagged(tag, value)
       end
     end
 
@@ -100,13 +106,28 @@ module TaskpaperUtils
     #
     # @api private
     def children_of_type(entry_type)
-      children.select { |child| child.type?(entry_type) }
+      children.select { |entry| entry.type?(entry_type) }
     end
 
     # @param of [:project, :task, :note]
     # @return whether this Entry is of the specified type
     def type?(of)
       type == of
+    end
+
+    # @return [Fixnum] the number of child entries nested under this one
+    def size
+      children.size
+    end
+
+    # @return [Entry] the most recently added child entry or `nil`
+    def last
+      children.last
+    end
+
+    # @api private
+    def children
+      @children ||= []
     end
   end
 end

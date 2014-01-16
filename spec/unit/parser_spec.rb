@@ -28,7 +28,7 @@ module TaskpaperUtils
           end
 
           it "appends to the end of parent's collection of children" do
-            expect(project.children.last.text).to eq('task y')
+            expect(project.last.text).to eq('task y')
           end
 
         end
@@ -42,7 +42,7 @@ module TaskpaperUtils
             doc = parse_doc("one\ntwo")
             expect(doc).to be_parent_of('one')
             expect(doc).to be_parent_of('two')
-            expect(doc).to have(2).children
+            expect(doc.size).to eq(2)
           end
 
           specify 'including projects on consecutive lines' do

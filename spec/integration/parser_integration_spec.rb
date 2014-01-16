@@ -63,7 +63,7 @@ module TaskpaperUtils
       end
 
       it 'adopts the unowned entries' do
-        expect(document).to have(4).children
+        expect(document).to have(4).entries
         expect(document.notes.map(&:text)).to eq ['a note', 'another note']
         expect(document).to have(1).tasks
         expect(document).to have(1).projects

@@ -6,6 +6,24 @@ module TaskpaperUtils
 
     let(:project) { new_entry('project:') }
 
+    describe 'Enumerability' do
+
+      before do
+        project << new_entry('- task')
+        project << new_entry('- ksat')
+      end
+
+      it 'is Enumerable' do
+        expect(project).to be_a(Enumerable)
+      end
+
+      it 'exposes an #each method' do
+        # Enumerable#map depends on each being implemented
+        expect(project.map(&:text)).to eq %w(task ksat)
+      end
+
+    end
+
     describe '#dump' do
 
       it "yields it's raw text" do
@@ -41,7 +59,13 @@ module TaskpaperUtils
 
     end
 
-    describe '#add_entry' do
+    describe '#size' do
+      specify '#size returns the number of child entries' do
+        expect { project << new_entry('e') }.to change(project, :size).by(1)
+      end
+    end
+
+    describe '#add_entry, #<<' do
 
       specify "adding a child entry sets it's parent" do
         task = project.add_entry new_entry('- task')
@@ -49,8 +73,23 @@ module TaskpaperUtils
       end
 
       it 'is aliased as <<' do
-        expect { project << new_entry('e') }.to change(project.children, :size)
+        expect { project << new_entry('e') }.to change(project, :size)
       end
+
+    end
+
+    describe '#last' do
+
+      it 'returns nil if the entry has no children' do
+        expect(project.last).to be_nil
+      end
+
+      it 'returns the entry added last' do
+        project << new_entry('1')
+        project << new_entry('2')
+        expect(project.last.text).to eq('2')
+      end
+
     end
 
     describe '#[]' do
