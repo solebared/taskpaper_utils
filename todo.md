@@ -1,6 +1,8 @@
 todo:
 ---
 
+* cull implementation specs
+* make [] work with symbols
 * introduce resultset
 * add #not_tagged
 * overload #[] to delegate to #named, #tagged, #not_tagged

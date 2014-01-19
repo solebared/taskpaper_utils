@@ -20,7 +20,7 @@ module TaskpaperUtils
         File.should_receive(:open).with('/path').and_yield(file)
         Parser.should_receive(:new).and_return(parser)
         parser.should_receive(:parse).with(file)
-        TaskpaperUtils.parse('/path')
+        TaskpaperUtils.parse_file('/path')
       end
 
     end

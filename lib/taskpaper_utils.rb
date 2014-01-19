@@ -13,12 +13,21 @@ end
 # @see README
 module TaskpaperUtils
 
-  # Parse the taskpaper formated document
+  # Parse a taskpaper formated file
   #
   # @param path [String] of file to parse
   # @return [Document]
-  def self.parse(path)
-    File.open(path) { |file| Parser.new.parse(file) }
+  def self.parse_file(path)
+    File.open(path) { |file| parse(file) }
+  end
+
+  # Parse any enumerable object containing taskpaper formated entries.
+  #
+  # @param enum [#each<String>] Collection of strings to parse.
+  #   Should expose an #each method that returns successive string in taskpaper format.
+  # @return [Document]
+  def self.parse(enum)
+    Parser.new.parse(enum)
   end
 
   # Serialize a {Document} to a file in taskpaper format

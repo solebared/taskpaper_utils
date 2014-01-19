@@ -12,7 +12,7 @@ module TaskpaperUtils
         # since the new file is based on the object graph, this serves as a good
         # integration test - anything we either don't parse or serialize correctly
         # will result in differing files
-        document = TaskpaperUtils.parse(exemplar_path)
+        document = TaskpaperUtils.parse_file(exemplar_path)
         Dir::Tmpname.create('taskpaper_utils_integration_spec-') do |new_file|
           begin
             TaskpaperUtils.save(document, new_file)

@@ -19,4 +19,19 @@ module ParsingHelpers
   def lines(string)
     string.gsub(/^ +/, '').lines
   end
+
+end
+
+# todo: eliminate ParsingHelpers
+module SpecHelpers
+
+  def parse(document_text)
+    TaskpaperUtils.parse(lines(document_text))
+  end
+
+  # todo: duplicated in ParsingHelpers
+  def lines(string)
+    string.gsub(/^ +/, '').lines
+  end
+
 end

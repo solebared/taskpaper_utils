@@ -33,7 +33,7 @@ Or build the gem yourself:
     require 'taskpaper_tools'
 
     # parse taskpaper document into object graph
-    document = TaskpaperUtils.parse('path/to/file.taskpaper')
+    document = TaskpaperUtils.parse_file('path/to/file.taskpaper')
 
     # Document contains projects, tasks and notes 
     project = document.projects.first

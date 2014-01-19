@@ -1,22 +1,25 @@
 require 'spec_helper'
 
+# todo: pull out of module
 module TaskpaperUtils
-  describe Parser, 'integration:' do
-    include ParsingHelpers
+  describe 'Basic parsing' do
+    include SpecHelpers
 
+    # todo: collapse describe block
     describe 'a simple document' do
 
-      let(:project_a) { document['Project A'] }
       let(:document) do
-        parse_doc(
+        parse(
           "Project A:
            - task one
            \t- subtask
-           - task two @priority(1)
+           - task two
            a note
            \t- subtask of a note
            Project B:")
       end
+
+      let(:project_a) { document['Project A'] }
 
       it 'contains projects' do
         expect(document).to have(2).projects
@@ -37,36 +40,6 @@ module TaskpaperUtils
       it 'contains notes within projects' do
         expect(project_a).to have(1).notes
         expect(project_a['a note']).to_not be_nil
-      end
-
-      describe 'tags' do
-
-        it 'recognizes tags' do
-          expect(project_a['task two'].tag?(:priority)).to be_true
-        end
-
-        it 'allows filtering by tag' do
-          expect(document.tagged(:priority, '1')).to eq [project_a['task two']]
-        end
-      end
-    end
-
-    describe 'a document with notes and tasks outside of projects' do
-
-      let(:document) do
-        parse_doc(
-          "a note
-           - a task
-           another note
-           a project:
-           - with a task")
-      end
-
-      it 'adopts the unowned entries' do
-        expect(document).to have(4).entries
-        expect(document.notes.map(&:text)).to eq ['a note', 'another note']
-        expect(document).to have(1).tasks
-        expect(document).to have(1).projects
       end
 
     end
