@@ -29,6 +29,10 @@ module SpecHelpers
     TaskpaperUtils.parse(lines(document_text))
   end
 
+  def parse_entry(line)
+    parse(line).first
+  end
+
   # todo: duplicated in ParsingHelpers
   def lines(string)
     string.gsub(/^ +/, '').lines

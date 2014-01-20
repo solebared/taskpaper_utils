@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Parsing', 'parent identification' do
+describe 'Parent identification' do
   include SpecHelpers
 
   describe 'simple indentation:' do

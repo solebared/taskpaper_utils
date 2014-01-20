@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'a document with notes and tasks outside of projects' do
+describe 'Document with notes and tasks outside of projects' do
   include SpecHelpers
 
   let(:document) do
@@ -13,7 +13,7 @@ describe 'a document with notes and tasks outside of projects' do
   end
 
   it 'adopts the unowned entries' do
-    # expand into individual specs
+    # todo: expand into individual specs
     expect(document).to have(4).entries
     expect(document.notes.map(&:text)).to eq ['a note', 'another note']
     expect(document).to have(1).tasks
