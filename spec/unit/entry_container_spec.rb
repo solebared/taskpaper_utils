@@ -6,24 +6,6 @@ module TaskpaperUtils
 
     let(:project) { new_entry('project:') }
 
-    describe 'Enumerability' do
-
-      before do
-        project << new_entry('- task')
-        project << new_entry('- ksat')
-      end
-
-      it 'is Enumerable' do
-        expect(project).to be_a(Enumerable)
-      end
-
-      it 'exposes an #each method' do
-        # Enumerable#map depends on each being implemented
-        expect(project.map(&:text)).to eq %w(task ksat)
-      end
-
-    end
-
     describe '#dump' do
 
       it "yields it's raw text" do
@@ -46,61 +28,6 @@ module TaskpaperUtils
           .to yield_successive_args "\t- one", "\t- two"
         end
       end
-    end
-
-    describe '#children of type' do
-
-      it 'finds children of the specified type' do
-        task = project << new_entry("\t- task")
-        note = project << new_entry("\ta note")
-        expect(project.children_of_type(:task)).to include task
-        expect(project.children_of_type(:task)).to_not include note
-      end
-
-    end
-
-    describe '#size' do
-      specify '#size returns the number of child entries' do
-        expect { project << new_entry('e') }.to change(project, :size).by(1)
-      end
-    end
-
-    describe '#add_entry, #<<' do
-
-      specify "adding a child entry sets it's parent" do
-        task = project.add_entry new_entry('- task')
-        expect(task.parent).to eq(project)
-      end
-
-      it 'is aliased as <<' do
-        expect { project << new_entry('e') }.to change(project, :size)
-      end
-
-    end
-
-    describe '#last' do
-
-      it 'returns nil if the entry has no children' do
-        expect(project.last).to be_nil
-      end
-
-      it 'returns the entry added last' do
-        project << new_entry('1')
-        project << new_entry('2')
-        expect(project.last.text).to eq('2')
-      end
-
-    end
-
-    describe '#[]' do
-
-      let!(:note)   { project << new_entry('a note') }
-
-      it 'finds a child referenced by text' do
-        expect(project['a note']).to eq(note)
-      end
-
-      # see specs for Entry#matches? for detailed cases
     end
 
     describe 'tagged' do
