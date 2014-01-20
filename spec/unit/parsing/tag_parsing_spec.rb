@@ -3,11 +3,6 @@ require 'spec_helper'
 describe 'Tag parsing' do
   include SpecHelpers
 
-  it 'allows filtering by tag' do
-    pending 'move this to enumerating specs'
-    expect(document.tagged(:priority, '1')).to eq [project_a['task two']]
-  end
-
   describe 'tags in a single entry' do
 
     it 'parses a tag at the end of the line' do
