@@ -12,7 +12,6 @@ describe 'Document structure' do
   end
 
   shared_examples_for 'it may not contain projects' do
-    # todo: implement document validation during parsing
     it 'does not provide an accessor for projects' do
       expect(subject.public_methods).not_to include(:projects)
     end
