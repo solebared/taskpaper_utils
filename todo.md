@@ -5,6 +5,7 @@ todo:
 * make [] work with symbols
 * introduce resultset
 * add #not_tagged
+* introduce Tag?
 * overload #[] to delegate to #named, #tagged, #not_tagged
 * require files as needed instead of all up front?
 * feature: blank lines

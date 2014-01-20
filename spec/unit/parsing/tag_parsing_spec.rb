@@ -4,7 +4,7 @@ describe 'Tag parsing' do
   include SpecHelpers
 
   it 'allows filtering by tag' do
-    pending 'move this to document specs'
+    pending 'move this to enumerating specs'
     expect(document.tagged(:priority, '1')).to eq [project_a['task two']]
   end
 
@@ -29,7 +29,7 @@ describe 'Tag parsing' do
 
     RSpec::Matchers.define :be_parsed_into_tags do |*array_of_tags|
       match do |string|
-        # do we need to check on extraneous tags are parsed?
+        # do we need to check no extraneous tags are parsed?
         entry = parse_entry(string)
         @unmatched = array_of_tags.reject { |tag, value| entry.tag?(tag, value) }
         @unmatched.empty?

@@ -3,8 +3,7 @@ require 'spec_helper'
 describe 'Elements parsed from a single entry' do
   include SpecHelpers
 
-  describe 'text' do
-
+  describe '#text' do
     it 'strips leading dash and indents from tasks' do
       expect(parse_entry("\t\t- task").text).to eq('task')
     end
@@ -16,49 +15,60 @@ describe 'Elements parsed from a single entry' do
     it 'just returns the input text for a note' do
       expect(parse_entry('any text').text).to eq('any text')
     end
-
   end
 
-  describe 'trailing tags' do
-    # todo: is trailing tags an implementation detail?
+  describe '#tag?' do
 
-    it 'parses text and a single trailing tag' do
-      expect('one @tag').to be_parsed_as_text('one').and_trailing_tags(' @tag')
-    end
+    let(:entry) { parse_entry('with @empty tag and one @with(value)') }
 
-    it 'returns an empty string when no trailing tags are present' do
-      expect('no tags').to be_parsed_as_text('no tags').and_trailing_tags('')
-    end
-
-    it 'parses text and multiple trailing tags' do
-      expect('1 @2 @3').to be_parsed_as_text('1').and_trailing_tags(' @2 @3')
-    end
-
-    it 'considers tags in between text to be part of the text' do
-      expect('in @btw een').to be_parsed_as_text('in @btw een').and_trailing_tags('')
-    end
-
-    it 'considers the first tag to be part of text if the line is only tags' do
-      expect('@all(words) @are(tags)')
-      .to be_parsed_as_text('@all(words)').and_trailing_tags(' @are(tags)')
-    end
-
-    RSpec::Matchers.define :be_parsed_as_text do |text|
-
-      chain(:and_trailing_tags) do |tags|
-        @tags = tags
+    describe 'when the tag does not exist' do
+      specify '#tag? returns false' do
+        expect(entry.tag?('nope')).to equal(false)
       end
 
-      match do |string|
-        @entry = parse_entry(string)
-        @entry.text == text && @entry.trailing_tags == @tags
+      specify '#tag_value returns nil' do
+        expect(entry.tag_value('nope')).to be_nil
+      end
+    end
+
+    describe 'when the tag exists without a value' do
+      specify '#tag? returns true' do
+        expect(entry.tag?('empty')).to equal(true)
       end
 
-      failure_message_for_should do |string|
-        <<-END
-        Expected text:#{text} and trailing tags:#{@tags}
-         but got text:#{@entry.text} and trailing tags:#{@entry.trailing_tags}
-        END
+      specify '#tag_value returns an empty string' do
+        expect(entry.tag_value('empty')).to eq('')
+      end
+    end
+
+    describe 'when the tag exists with a value' do
+
+      describe '#tag?' do
+        it 'returns true when given no value' do
+          expect(entry.tag?('with')).to equal(true)
+        end
+
+        it 'returns true given the matching value' do
+          expect(entry.tag?('with', 'value')).to equal(true)
+        end
+
+        it 'returns false given a different value' do
+          expect(entry.tag?('with', 'wrong value')).to equal(false)
+        end
+
+        it 'works with symbols' do
+          expect(entry.tag?(:with, :value)).to equal(true)
+        end
+      end
+
+      describe '#tag_value' do
+        it 'returns the value' do
+          expect(entry.tag_value('with')).to eq('value')
+        end
+
+        it 'works with a symbol' do
+          expect(entry.tag_value(:with)).to eq('value')
+        end
       end
     end
   end
