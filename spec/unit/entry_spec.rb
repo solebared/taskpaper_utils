@@ -6,15 +6,6 @@ module TaskpaperUtils
 
     let(:entry) { new_entry('any entry') }
 
-    it 'generates getters for notes and tasks' do
-      expect(entry.public_methods).to include(:notes, :tasks)
-    end
-
-    it 'aliases #tasks as #subtasks' do
-      entry << new_entry('- subtask')
-      expect(entry.subtasks).to eq(entry.tasks)
-    end
-
     it 'delegates #document to its parent' do
       entry.parent = double('parent-entry')
       entry.parent.should_receive('document')
