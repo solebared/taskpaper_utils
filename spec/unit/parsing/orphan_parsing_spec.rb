@@ -12,11 +12,16 @@ describe 'Document with notes and tasks outside of projects' do
        - with a task")
   end
 
-  it 'adopts the unowned entries' do
-    # todo: expand into individual specs
-    expect(document).to have(4).entries
+  it 'adopts orphaned notes' do
     expect(document.notes.map(&:text)).to eq ['a note', 'another note']
+  end
+
+  it 'adopts orphaned tasks' do
     expect(document).to have(1).tasks
+  end
+
+  it 'correctly separates orphans from projects' do
+    expect(document).to have(4).entries
     expect(document).to have(1).projects
   end
 

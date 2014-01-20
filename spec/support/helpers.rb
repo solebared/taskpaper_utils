@@ -34,6 +34,7 @@ module SpecHelpers
   end
 
   # todo: duplicated in ParsingHelpers
+  # todo: move this functionality into Parser?
   def lines(string)
     string.gsub(/^ +/, '').lines
   end
